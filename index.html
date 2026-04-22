@@ -3,16 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>yrdsl.app · your yard sale, online</title>
+<title>yrdsl.app · a digital yard sale</title>
+<meta name="description" content="A single webpage for your yard sale. Self-host on GitHub Pages, or let us host it for pennies a month." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   yrdsl.app landing page
-   Neutral, minimal, matches the gallery's visual DNA
-   ============================================================ */
-
 :root {
   --bg: #fafaf9;
   --surface: #ffffff;
@@ -22,16 +18,10 @@
   --muted: #71717a;
   --line: #e7e5e4;
   --line-2: #d6d3d1;
-  --accent: #18181b;
-  --accent-ink: #fafaf9;
-  --ok: #15803d;
-  --warn: #b45309;
-  --danger: #b91c1c;
   --radius: 10px;
   --radius-lg: 14px;
   --shadow-sm: 0 1px 2px rgba(24,24,27,.04);
   --shadow-md: 0 8px 24px -8px rgba(24,24,27,.12);
-  --shadow-lg: 0 40px 80px -40px rgba(24,24,27,.25);
 }
 html[data-dark="true"] {
   --bg: #0d0d0e;
@@ -42,10 +32,7 @@ html[data-dark="true"] {
   --muted: #a1a1aa;
   --line: #27272a;
   --line-2: #3f3f46;
-  --accent: #fafaf9;
-  --accent-ink: #18181b;
   --shadow-md: 0 8px 24px -8px rgba(0,0,0,.6);
-  --shadow-lg: 0 40px 80px -40px rgba(0,0,0,.8);
 }
 
 * { box-sizing: border-box; }
@@ -57,18 +44,16 @@ body {
   font-size: 15px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: "ss01", "cv11";
 }
 button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; padding: 0; }
 a { color: inherit; text-decoration: none; }
+code { font-family: "JetBrains Mono", monospace; font-size: 0.92em; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); }
 ::selection { background: var(--ink); color: var(--bg); }
 
-.wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 32px; }
 @media (max-width: 640px) { .wrap { padding: 0 20px; } }
 
-/* ============================================================
-   Top nav
-   ============================================================ */
+/* Nav */
 .nav {
   position: sticky; top: 0; z-index: 30;
   background: color-mix(in oklab, var(--bg) 85%, transparent);
@@ -84,22 +69,9 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex; align-items: center; gap: 10px;
   font-weight: 600; letter-spacing: -0.01em; font-size: 16px;
 }
-.brand svg { color: var(--ink); }
-.nav-links {
-  display: flex; gap: 28px;
-  font-size: 14px; color: var(--muted);
-}
-.nav-links a { transition: color .12s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.nav-gh {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; color: var(--muted);
-  padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px;
-  transition: border-color .12s, color .12s;
-}
-.nav-gh:hover { color: var(--ink); border-color: var(--line-2); }
-
+.nav-right { display: flex; align-items: center; gap: 16px; font-size: 14px; color: var(--muted); }
+.nav-right a { transition: color .12s; }
+.nav-right a:hover { color: var(--ink); }
 .mode-toggle {
   width: 34px; height: 20px;
   border-radius: 999px;
@@ -117,754 +89,94 @@ a { color: inherit; text-decoration: none; }
 html[data-dark="true"] .mode-toggle { background: var(--line-2); }
 html[data-dark="true"] .mode-toggle::after { left: 16px; }
 
-@media (max-width: 720px) {
-  .nav-links { display: none; }
-}
-
-/* ============================================================
-   Hero
-   ============================================================ */
-.hero {
-  padding: 72px 0 48px;
-  position: relative;
-}
-.hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: 64px;
-  align-items: center;
-}
-@media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero { padding: 48px 0 40px; }
-}
-
-.eyebrow {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 600;
-  letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--warn);
-  background: color-mix(in oklab, var(--warn) 14%, transparent);
-  padding: 5px 10px;
-  border-radius: 999px;
-  margin-bottom: 22px;
-}
-.eyebrow::before {
-  content: "";
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--warn);
-}
-
+/* Hero */
+.hero { padding: 64px 0 40px; }
+@media (max-width: 720px) { .hero { padding: 40px 0 32px; } }
 h1 {
-  font-size: clamp(36px, 5vw, 56px);
-  line-height: 1.02;
-  letter-spacing: -0.025em;
+  font-size: clamp(32px, 4.5vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   font-weight: 600;
-  margin: 0 0 20px;
-  color: var(--ink);
-  text-wrap: balance;
+  margin: 0 0 16px;
 }
-h1 em {
-  font-style: normal;
-  background: linear-gradient(180deg, transparent 62%, #fde68a 62%);
-  padding: 0 4px;
-}
-html[data-dark="true"] h1 em {
-  background: linear-gradient(180deg, transparent 62%, rgba(253,230,138,0.22) 62%);
-}
-
 .hero-sub {
   font-size: 17px;
   color: var(--ink-2);
-  line-height: 1.55;
-  margin: 0 0 32px;
-  max-width: 520px;
-  text-wrap: pretty;
+  margin: 0 0 20px;
+  max-width: 620px;
 }
+.hero-link {
+  font-size: 14px; color: var(--muted);
+}
+.hero-link a { border-bottom: 1px solid var(--line-2); padding-bottom: 1px; transition: color .12s, border-color .12s; }
+.hero-link a:hover { color: var(--ink); border-color: var(--ink); }
 
-/* download CTA */
-.cta-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.btn-download {
-  display: inline-flex; align-items: center; gap: 12px;
-  padding: 14px 22px 14px 18px;
-  background: var(--ink); color: var(--bg);
-  border-radius: 12px;
-  font-weight: 600; font-size: 15px;
-  box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--ink) 40%, transparent);
-  transition: transform .08s, box-shadow .15s;
-}
-.btn-download:hover { transform: translateY(-1px); box-shadow: 0 14px 28px -8px color-mix(in oklab, var(--ink) 50%, transparent); }
-.btn-download:active { transform: translateY(0); }
-.btn-download .os-icon { display: grid; place-items: center; }
-.btn-download .cta-main { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; gap: 3px; }
-.btn-download .cta-sub { font-size: 11px; opacity: 0.7; font-weight: 400; letter-spacing: 0.04em; }
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 14px 18px;
-  border: 1px solid var(--line-2);
-  border-radius: 12px;
-  font-weight: 500; font-size: 14px;
-  color: var(--ink-2);
-  transition: border-color .15s, color .15s;
-}
-.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
-
-.os-switcher {
-  margin-top: 14px;
-  display: inline-flex; gap: 2px; padding: 3px;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font-size: 12px;
-}
-.os-switcher button {
-  padding: 5px 12px; border-radius: 7px;
-  color: var(--muted);
-  display: inline-flex; align-items: center; gap: 6px;
-  transition: all .12s;
-}
-.os-switcher button.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
-.os-switcher button:hover:not(.active) { color: var(--ink-2); }
-
-.hero-meta {
-  margin-top: 32px;
-  display: flex; gap: 28px; flex-wrap: wrap;
-  font-size: 13px; color: var(--muted);
-  padding-top: 24px; border-top: 1px solid var(--line);
-}
-.hero-meta .m b { color: var(--ink); font-weight: 600; }
-
-/* Hero visual: stylized gallery mock */
-.hero-visual {
-  position: relative;
-}
-.browser {
-  background: var(--surface);
+.shot {
+  margin-top: 36px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  transform: perspective(1800px) rotateY(-2deg) rotateX(2deg);
-  transform-origin: center;
-}
-@media (max-width: 960px) {
-  .browser { transform: none; }
-}
-.browser-bar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--line);
-  background: var(--surface-2);
-}
-.dots { display: inline-flex; gap: 6px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); }
-.dot.r { background: #e06360; }
-.dot.y { background: #e0b050; }
-.dot.g { background: var(--line-2); }
-.url {
-  flex: 1; margin: 0 12px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11.5px; color: var(--muted);
-  padding: 4px 10px;
+  box-shadow: var(--shadow-md);
   background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  display: inline-flex; align-items: center; gap: 6px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.url svg { flex-shrink: 0; color: var(--muted); }
-.url .path { color: var(--ink-2); }
+.shot img { width: 100%; height: auto; display: block; }
 
-/* Embedded gallery mock */
-.mock { background: var(--surface); padding: 0; }
-.mock-head {
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid var(--line);
-  display: flex; justify-content: space-between; align-items: baseline;
-}
-.mock-title { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
-.mock-sub { font-size: 11px; color: var(--muted); font-family: "JetBrains Mono", monospace; }
-.mock-lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font-size: 10px; }
-.mock-lang span { padding: 3px 8px; color: var(--muted); font-weight: 600; }
-.mock-lang span.a { background: var(--ink); color: var(--bg); }
-
-.mock-ctrl {
-  display: flex; gap: 8px; padding: 10px 18px;
-  border-bottom: 1px solid var(--line);
-  font-size: 11px;
-  align-items: center;
-}
-.mock-search {
-  flex: 1;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px 10px;
-  color: var(--muted);
-  display: inline-flex; align-items: center; gap: 6px;
-}
-.mock-seg {
-  display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 2px; gap: 2px;
-}
-.mock-seg span { padding: 3px 8px; border-radius: 5px; color: var(--muted); font-weight: 500; }
-.mock-seg span.a { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
-.mock-seg .n { color: var(--muted); font-size: 9px; margin-left: 4px; font-weight: 400; }
-.mock-seg span.a .n { color: var(--ink-2); background: var(--line); padding: 1px 5px; border-radius: 999px; }
-
-.mock-chips {
-  display: flex; gap: 6px; padding: 10px 18px; flex-wrap: wrap;
-  border-bottom: 1px solid var(--line);
-}
-.mock-chip {
-  padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px;
-  font-size: 10.5px; color: var(--muted);
-}
-.mock-chip.a { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-
-.mock-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 14px; padding: 18px;
-}
-.mock-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.mock-thumb { aspect-ratio: 4/3; position: relative; overflow: hidden; }
-.mock-thumb svg { width: 100%; height: 100%; display: block; }
-.mock-body { padding: 10px 12px 12px; }
-.mock-card-title { font-size: 12.5px; font-weight: 500; letter-spacing: -0.005em; color: var(--ink); line-height: 1.25; margin-bottom: 4px; }
-.mock-card-price { font-size: 14px; font-weight: 600; color: var(--ink); }
-.mock-card.r .mock-thumb { filter: grayscale(.8); }
-.mock-card.r .mock-card-title, .mock-card.r .mock-card-price { color: var(--muted); }
-.mock-card.r .mock-card-price { text-decoration: line-through; }
-.badge-r {
-  position: absolute; top: 8px; left: 8px;
-  background: var(--ink); color: var(--bg);
-  font-size: 9px; font-weight: 600;
-  padding: 2px 7px; border-radius: 4px;
-  letter-spacing: 0.04em; text-transform: uppercase;
-}
-
-/* ============================================================
-   Section scaffolding
-   ============================================================ */
-section { padding: 80px 0; border-top: 1px solid var(--line); }
-@media (max-width: 720px) { section { padding: 56px 0; } }
-
-.section-head { margin-bottom: 48px; max-width: 720px; }
-.section-eyebrow {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px; letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-.section-head h2 {
-  font-size: clamp(28px, 3.5vw, 38px);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+/* Two paths */
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+@media (max-width: 720px) { section { padding: 40px 0; } }
+h2 {
+  font-size: clamp(22px, 2.5vw, 26px);
   font-weight: 600;
-  margin: 0 0 14px;
-  text-wrap: balance;
+  letter-spacing: -0.015em;
+  margin: 0 0 24px;
 }
-.section-head p {
-  font-size: 16px; color: var(--ink-2); margin: 0;
-  max-width: 620px;
-  text-wrap: pretty;
+.paths {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
-
-/* ============================================================
-   How it works. 3 columns, with phone mock
-   ============================================================ */
-.how {
-  display: grid; grid-template-columns: 1.1fr 1fr;
-  gap: 48px;
-  align-items: start;
-}
-@media (max-width: 900px) { .how { grid-template-columns: 1fr; gap: 40px; } }
-
-.steps { display: flex; flex-direction: column; gap: 8px; }
-.step {
-  display: grid; grid-template-columns: 34px 1fr;
-  gap: 16px;
-  padding: 18px 0;
-  border-top: 1px solid var(--line);
-  cursor: pointer;
-  transition: background .12s;
-}
-.step:hover { background: var(--surface-2); margin: 0 -16px; padding: 18px 16px; }
-.step.active { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--line); margin: 0 -16px; padding: 18px 16px; box-shadow: var(--shadow-sm); border-top-color: var(--line); }
-.step-n {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--surface-2); border: 1px solid var(--line);
-  display: grid; place-items: center;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px; font-weight: 500; color: var(--ink-2);
-}
-.step.active .step-n { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.step-h { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
-.step-p { font-size: 14px; color: var(--ink-2); margin: 0; line-height: 1.55; }
-.step-meta {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 10px;
-  font-family: "JetBrains Mono", monospace; font-size: 11px;
-  color: var(--muted);
-}
-.step-meta kbd {
-  font-family: inherit;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  padding: 1px 6px;
-  font-size: 10px;
-}
-
-/* iPhone mock */
-.phone-frame {
-  width: 260px;
-  max-width: 100%;
-  margin: 0 auto;
-  aspect-ratio: 9/18.5;
-  background: #1a1a1c;
-  border-radius: 38px;
-  padding: 12px;
-  position: relative;
-  box-shadow: var(--shadow-lg), inset 0 0 0 1px rgba(255,255,255,0.05);
-}
-.phone-screen {
-  width: 100%; height: 100%;
+@media (max-width: 720px) { .paths { grid-template-columns: 1fr; } }
+.path {
   background: var(--surface);
-  border-radius: 32px;
-  overflow: hidden;
-  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px 24px 20px;
   display: flex; flex-direction: column;
 }
-.phone-notch {
-  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-  width: 96px; height: 24px; background: #1a1a1c; border-radius: 14px;
-  z-index: 3;
-}
-.phone-status {
-  padding: 14px 22px 6px;
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 11px; font-weight: 600; color: var(--ink);
-  font-feature-settings: "tnum";
-}
-.phone-status .signal { display: inline-flex; align-items: center; gap: 3px; }
-.phone-status .bar { width: 3px; border-radius: 1px; background: var(--ink); }
-.phone-status .bar.b1 { height: 4px; }
-.phone-status .bar.b2 { height: 6px; }
-.phone-status .bar.b3 { height: 8px; }
-.phone-status .bar.b4 { height: 10px; }
-
-.claude-chrome {
-  padding: 10px 14px 8px;
-  display: flex; align-items: center; gap: 8px;
-  border-bottom: 1px solid var(--line);
-}
-.claude-chrome .star {
-  width: 22px; height: 22px; border-radius: 6px;
-  background: #d97757;
-  display: grid; place-items: center;
-  color: #fff; font-weight: 700; font-size: 13px;
-}
-.claude-name { font-size: 13px; font-weight: 600; letter-spacing: -0.005em; }
-.claude-conn { margin-left: auto; font-size: 10px; color: var(--muted); padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px; }
-
-.chat {
-  flex: 1;
-  padding: 12px 14px;
-  overflow: hidden;
-  display: flex; flex-direction: column; gap: 10px;
-  font-size: 13px;
-  line-height: 1.4;
-}
-.msg { max-width: 85%; padding: 9px 12px; border-radius: 14px; word-wrap: break-word; }
-.msg.user { background: #d97757; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-.msg.ai { background: var(--surface-2); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--line); }
-.msg.user .photo {
-  width: 140px; height: 100px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  display: block;
-  background: linear-gradient(135deg, #8b6f47, #5c4022);
-  position: relative; overflow: hidden;
-}
-.msg.user .photo::after {
-  content: ""; position: absolute; inset: 15% 25% 30% 18%;
-  background: linear-gradient(135deg, #a87d50, #704929);
-  border-radius: 4px 4px 2px 2px;
-  box-shadow: inset 0 -8px 0 rgba(0,0,0,0.2);
-}
-.tool-call {
-  background: var(--bg); border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--ink-2);
-  align-self: flex-start;
-  max-width: 90%;
-}
-.tool-call .tool-name { color: #d97757; font-weight: 500; }
-.tool-call .tool-args { color: var(--muted); }
-.tool-call .tool-ok { color: var(--ink-2); display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; }
-
-.msg.ai .listing-preview {
-  margin-top: 8px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 8px;
-  font-size: 12px;
-}
-.listing-preview .lp-thumb {
-  aspect-ratio: 4/3;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #8b6f47, #5c4022);
-  margin-bottom: 6px; position: relative; overflow: hidden;
-}
-.listing-preview .lp-thumb::after {
-  content: ""; position: absolute; inset: 15% 25% 30% 18%;
-  background: linear-gradient(135deg, #a87d50, #704929);
-  border-radius: 4px;
-}
-.listing-preview .lp-title { font-weight: 600; font-size: 12px; line-height: 1.3; margin-bottom: 2px; color: var(--ink); }
-.listing-preview .lp-price { font-size: 12px; font-weight: 600; color: var(--ink); }
-.listing-preview .lp-tags { font-size: 10px; color: var(--muted); margin-top: 4px; }
-
-.typing { display: inline-flex; gap: 3px; padding: 2px 0; }
-.typing span { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: typing 1.2s infinite; }
-.typing span:nth-child(2) { animation-delay: 0.15s; }
-.typing span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes typing {
-  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-  30% { opacity: 1; transform: translateY(-3px); }
-}
-
-.compose {
-  padding: 8px 12px 12px;
-  border-top: 1px solid var(--line);
-  background: var(--surface-2);
-  display: flex; gap: 8px; align-items: center;
-}
-.compose-input {
-  flex: 1;
-  padding: 7px 12px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 12px; color: var(--muted);
-}
-.compose-send {
-  width: 30px; height: 30px; border-radius: 50%; background: #d97757;
-  display: grid; place-items: center; color: white;
-}
-
-/* ============================================================
-   Feature grid
-   ============================================================ */
-.features {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-@media (max-width: 900px) { .features { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
-
-.feat { background: var(--surface); padding: 30px 28px; }
-.feat-h { font-size: 17px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
-.feat-p { font-size: 14px; color: var(--ink-2); margin: 0; line-height: 1.6; }
-
-/* ============================================================
-   Pricing
-   ============================================================ */
-.pricing-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: stretch;
-}
-.pricing-grid .price-card { padding: 32px; display: flex; flex-direction: column; justify-content: center; }
-@media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
-
-.forecast {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  box-shadow: var(--shadow-sm);
-}
-.forecast-head {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 20px;
-  padding-bottom: 16px; border-bottom: 1px solid var(--line);
-}
-.forecast-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted);
-  white-space: nowrap;
-  margin-bottom: 4px;
-}
-.forecast-month { font-size: 13px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
-.forecast-total {
-  font-size: 48px; font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  margin-bottom: 4px;
-  font-feature-settings: "tnum";
-}
-.forecast-sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
-.sparkline { margin-bottom: 24px; }
-
-.forecast-rows { display: flex; flex-direction: column; gap: 14px; }
-.frow {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, auto) auto;
-  gap: 12px;
-  align-items: center;
-  font-size: 13px;
-}
-.frow .fname { color: var(--ink-2); white-space: nowrap; }
-.frow .fusage { color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11.5px; font-feature-settings: "tnum"; white-space: nowrap; text-align: right; }
-.frow .fcost { font-weight: 500; font-feature-settings: "tnum"; min-width: 60px; text-align: right; }
-.frow-sep { height: 1px; background: var(--line); }
-
-.forecast-foot {
-  margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line);
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 12px; color: var(--muted);
-}
-.forecast-foot a { color: var(--ink-2); border-bottom: 1px solid var(--line-2); }
-.forecast-foot a:hover { color: var(--ink); }
-
-/* pricing explainer */
-.price-side {
-  display: flex; flex-direction: column; gap: 16px;
-}
-.price-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-}
-.price-card.hero-price {
-  background: var(--ink); color: var(--bg);
-  border-color: var(--ink);
-}
-.price-card.hero-price .price-head { color: color-mix(in oklab, var(--bg) 70%, transparent); }
-.price-head {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 12px;
-}
-.price-big { font-size: 40px; font-weight: 600; letter-spacing: -0.025em; line-height: 1; margin-bottom: 8px; font-feature-settings: "tnum"; }
-.price-note { font-size: 14px; opacity: 0.85; line-height: 1.55; margin: 0; }
-
-.rate-list { font-size: 13px; color: var(--ink-2); display: flex; flex-direction: column; gap: 10px; }
-.rate-list .rr { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; padding: 6px 0; border-bottom: 1px dashed var(--line); }
-.rate-list .rr:last-child { border-bottom: none; }
-.rate-list .rr b { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink); font-weight: 500; }
-
-/* ============================================================
-   Comparison table
-   ============================================================ */
-.cmp {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.cmp table { width: 100%; border-collapse: collapse; }
-.cmp th, .cmp td {
-  padding: 14px 16px;
-  text-align: left;
-  font-size: 13.5px;
-  border-bottom: 1px solid var(--line);
-  vertical-align: middle;
-}
-.cmp th {
-  background: var(--surface-2);
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--muted);
-}
-.cmp th:first-child, .cmp td:first-child { text-align: left; }
-.cmp th:not(:first-child), .cmp td:not(:first-child) { text-align: center; }
-.cmp tr:last-child td { border-bottom: none; }
-.cmp .us { background: color-mix(in oklab, var(--ink) 4%, transparent); }
-.cmp .us-head { background: var(--ink); color: var(--bg); }
-.cmp tr:last-child .us { border-bottom-right-radius: var(--radius-lg); }
-
-.cmp .fee { font-feature-settings: "tnum"; }
-.cmp .tick { color: var(--ink); font-weight: 500; }
-.cmp .cross { color: var(--muted); }
-.cmp .us .tick { color: var(--ink); }
-.cmp td.rowlabel { font-weight: 500; color: var(--ink); }
-
-@media (max-width: 720px) {
-  .cmp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .cmp { min-width: 640px; }
-}
-
-/* ============================================================
-   Themes switcher
-   ============================================================ */
-.themes-switcher {
-  display: inline-flex;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 3px;
-  gap: 2px;
-  background: var(--surface);
-  margin-bottom: 28px;
-}
-.themes-switcher button {
-  padding: 7px 16px;
-  font-size: 13px; font-weight: 500;
-  color: var(--muted);
-  border-radius: 7px;
-  transition: all .12s;
-}
-.themes-switcher button.active { background: var(--ink); color: var(--bg); }
-.themes-switcher button:hover:not(.active) { color: var(--ink); }
-
-.theme-preview {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.theme-preview .theme-stage {
-  transition: all .3s;
-  padding: 32px;
-}
-.theme-preview .theme-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 640px) { .theme-preview .theme-grid { grid-template-columns: repeat(2, 1fr); } }
-
-.tp-card { overflow: hidden; display: flex; flex-direction: column; }
-.tp-card .tp-thumb { aspect-ratio: 4/3; overflow: hidden; }
-.tp-card .tp-thumb svg { width: 100%; height: 100%; display: block; }
-
-/* Theme. conservative */
-.theme-stage[data-t="conservative"] { background: #fafaf9; color: #18181b; font-family: "Inter", sans-serif; }
-[data-t="conservative"] .tp-header { margin-bottom: 20px; }
-[data-t="conservative"] .tp-header h3 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
-[data-t="conservative"] .tp-header p { margin: 2px 0 0; font-size: 13px; color: #71717a; }
-[data-t="conservative"] .tp-card { background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; }
-[data-t="conservative"] .tp-body { padding: 10px 12px; }
-[data-t="conservative"] .tp-title { font-size: 13px; font-weight: 500; color: #18181b; margin-bottom: 3px; }
-[data-t="conservative"] .tp-price { font-size: 14px; font-weight: 600; }
-
-/* Theme. artsy */
-.theme-stage[data-t="artsy"] { background: #f3efe8; color: #1b1612; font-family: Georgia, "Cormorant Garamond", serif; }
-[data-t="artsy"] .tp-header { margin-bottom: 28px; }
-[data-t="artsy"] .tp-header h3 { margin: 0; font-size: 26px; font-style: italic; font-weight: 400; letter-spacing: 0.005em; }
-[data-t="artsy"] .tp-header p { margin: 4px 0 0; font-size: 10px; color: #8a7d6f; text-transform: uppercase; letter-spacing: 0.22em; font-family: "Inter", sans-serif; }
-[data-t="artsy"] .tp-card { background: transparent; }
-[data-t="artsy"] .tp-card .tp-thumb { aspect-ratio: 4/5; box-shadow: 0 20px 40px -20px rgba(27,22,18,0.2); }
-[data-t="artsy"] .tp-body { padding: 12px 2px 0; }
-[data-t="artsy"] .tp-title { font-family: Georgia, serif; font-style: italic; font-size: 15px; margin-bottom: 4px; }
-[data-t="artsy"] .tp-price { font-family: "Inter", sans-serif; font-size: 11px; letter-spacing: 0.12em; color: #4a3f35; }
-
-/* Theme. hip */
-.theme-stage[data-t="hip"] { background: #0e0e0e; color: #f4f4f2; font-family: "Inter", sans-serif; }
-[data-t="hip"] .tp-header { margin-bottom: 20px; border-bottom: 2px solid #f4f4f2; padding-bottom: 14px; }
-[data-t="hip"] .tp-header h3 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; }
-[data-t="hip"] .tp-header h3::after { content: "▄"; color: #d4ff3a; margin-left: 6px; font-size: 0.5em; }
-[data-t="hip"] .tp-header p { margin: 3px 0 0; font-family: "JetBrains Mono", monospace; font-size: 10px; color: #d4ff3a; text-transform: uppercase; letter-spacing: 0.08em; }
-[data-t="hip"] .theme-grid { gap: 2px; background: #f4f4f2; border: 2px solid #f4f4f2; }
-[data-t="hip"] .tp-card { background: #161616; border-radius: 0; }
-[data-t="hip"] .tp-body { padding: 12px; }
-[data-t="hip"] .tp-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.015em; margin-bottom: 4px; color: #f4f4f2; }
-[data-t="hip"] .tp-price { font-size: 15px; font-weight: 700; color: #d4ff3a; letter-spacing: -0.02em; }
-
-/* Theme. retro */
-.theme-stage[data-t="retro"] { background: #f5ead0; color: #2b1d0f; font-family: Georgia, serif; }
-[data-t="retro"] .tp-header { margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid #2b1d0f; }
-[data-t="retro"] .tp-header h3 { margin: 0; font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #2b1d0f; letter-spacing: 0.005em; }
-[data-t="retro"] .tp-header p { margin: 4px 0 0; font-size: 12px; font-style: italic; color: #7a5c3a; font-family: Georgia, serif; letter-spacing: 0.04em; }
-[data-t="retro"] .tp-card { background: #fdf6e3; border: 1px solid #2b1d0f; border-radius: 2px; box-shadow: 3px 3px 0 rgba(43,29,15,0.15); }
-[data-t="retro"] .tp-card .tp-thumb { border-bottom: 1px solid #2b1d0f; }
-[data-t="retro"] .tp-body { padding: 12px 14px; }
-[data-t="retro"] .tp-title { font-family: Georgia, serif; font-weight: 600; font-size: 14px; color: #2b1d0f; margin-bottom: 4px; }
-[data-t="retro"] .tp-price { font-family: Georgia, serif; font-weight: 700; font-size: 18px; color: #c24d1e; }
-
-/* ============================================================
-   OSS + Footer
-   ============================================================ */
-.oss {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 32px 36px;
-  max-width: 880px; margin: 0 auto;
-  display: flex; flex-wrap: wrap;
-  gap: 24px 40px;
-  align-items: center; justify-content: space-between;
-}
-@media (max-width: 720px) {
-  .oss { padding: 24px; }
-}
-.oss h3 { margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.015em; }
-.oss p { margin: 0; color: var(--ink-2); font-size: 15px; max-width: 560px; line-height: 1.5; }
-.oss-cta {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 12px 18px;
-  background: var(--ink); color: var(--bg);
-  border-radius: 10px;
+.path h3 { font-size: 17px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+.path p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.6; }
+.path .cta {
+  margin-top: auto;
+  display: inline-flex; align-items: center; gap: 6px;
   font-size: 14px; font-weight: 500;
-  transition: transform .08s;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 1px;
+  align-self: flex-start;
+  transition: opacity .12s;
 }
-.oss-cta:hover { transform: translateY(-1px); }
+.path .cta:hover { opacity: 0.7; }
 
+/* Cost */
+.cost p { font-size: 15px; color: var(--ink-2); margin: 0 0 12px; max-width: 640px; line-height: 1.6; }
+.cost p:last-child { margin-bottom: 0; }
+
+/* Footer */
 footer {
   padding: 40px 0 60px;
   border-top: 1px solid var(--line);
-  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 32px;
   color: var(--muted); font-size: 13px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
 }
-@media (max-width: 720px) { footer { grid-template-columns: 1fr 1fr; } }
-footer h5 { margin: 0 0 12px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); font-weight: 600; font-family: "JetBrains Mono", monospace; }
-footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-footer a:hover { color: var(--ink); }
-footer .legal { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; }
-
-/* ============================================================
-   Tweaks panel
-   ============================================================ */
-.tweaks {
-  position: fixed; bottom: 24px; right: 24px; z-index: 100;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: var(--shadow-lg);
-  width: 240px;
-  font-size: 13px;
-  display: none;
-}
-.tweaks.open { display: block; }
-.tweaks h4 { margin: 0 0 10px; font-size: 11px; font-family: "JetBrains Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-.tweaks .trow { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
-.tweaks .trow:last-child { margin-bottom: 0; }
-.tweaks select { padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: 12px; }
-.tweaks .tcheck { display: inline-flex; align-items: center; gap: 6px; }
+footer a { border-bottom: 1px dotted var(--line-2); transition: color .12s, border-color .12s; }
+footer a:hover { color: var(--ink); border-color: var(--ink); }
+footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAV
-     ============================================================ -->
 <nav class="nav">
   <div class="wrap nav-inner">
-    <a class="brand" href="#top">
+    <a class="brand" href="/">
       <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
         <path d="M6 14 L16 4 L26 14 V26 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
         <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
@@ -872,678 +184,85 @@ footer .legal { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid va
       </svg>
       yrdsl.app
     </a>
-    <div class="nav-links">
-      <a href="#how">How it works</a>
-      <a href="#features">Why</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#themes">Themes</a>
-    </div>
     <div class="nav-right">
+      <a href="https://github.com/KuvopLLC/yrdsl" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://app.yrdsl.app/login">Sign in</a>
       <button class="mode-toggle" id="mode" aria-label="Toggle dark mode"></button>
-      <a class="nav-gh" href="https://github.com/KuvopLLC/yrdsl" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-        GitHub
-      </a>
     </div>
   </div>
 </nav>
 
-<a id="top"></a>
-
-<!-- ============================================================
-     HERO
-     ============================================================ -->
-<section class="hero" style="border-top: none; padding-top: 72px;">
-  <div class="wrap hero-grid">
-    <div class="hero-left">
-      <span class="eyebrow">Invite-only beta</span>
-      <h1 id="headline">Like a yard sale. <em>On the internet.</em></h1>
-      <p class="hero-sub" id="subheadline">
-        Not a marketplace like eBay or Facebook. We don't send you buyers. Your neighbors, coworkers, and group chats do. We just give you the page to point them at.
-      </p>
-      <div class="cta-row">
-        <a class="btn-download" href="https://app.yrdsl.app/signup">
-          <span class="cta-main">
-            <span>Sign up</span>
-            <span class="cta-sub">Invite-only beta · free during beta</span>
-          </span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-        <a class="btn-ghost" href="#how">See how it works →</a>
-      </div>
-      <div class="hero-meta">
-        <div class="m"><b>No commission</b> on sales</div>
-        <div class="m"><b>No app</b> to install</div>
-        <div class="m"><b>Free</b> during the beta</div>
-        <div class="m"><b>One link</b> to share</div>
-      </div>
-    </div>
-
-    <!-- Hero visual: stylized gallery in browser chrome -->
-    <div class="hero-visual">
-      <div class="browser">
-        <div class="browser-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <div class="url">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            yrdsl.app<span class="path">/matt/spring-purge</span>
-          </div>
-        </div>
-        <div class="mock">
-          <div class="mock-head">
-            <div>
-              <div class="mock-title">Spring Purge</div>
-              <div class="mock-sub">everything must go · austin, tx</div>
-            </div>
-            <div class="mock-lang"><span class="a">EN</span><span>DE</span></div>
-          </div>
-          <div class="mock-ctrl">
-            <div class="mock-search">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              Search
-            </div>
-            <div class="mock-seg">
-              <span class="a">Available <span class="n">10</span></span>
-              <span>Reserved <span class="n">2</span></span>
-              <span>All <span class="n">12</span></span>
-            </div>
-          </div>
-          <div class="mock-chips">
-            <span class="mock-chip a">furniture</span>
-            <span class="mock-chip">vintage</span>
-            <span class="mock-chip">bikes</span>
-            <span class="mock-chip">outdoor</span>
-            <span class="mock-chip">lighting</span>
-          </div>
-          <div class="mock-grid">
-            <div class="mock-card">
-              <div class="mock-thumb">
-                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                  <defs><linearGradient id="g1" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#6d28d9"/></linearGradient></defs>
-                  <rect width="120" height="90" fill="url(#g1)"/>
-                  <rect x="18" y="42" width="84" height="28" rx="4" fill="#3b1e82" opacity="0.85"/>
-                  <rect x="22" y="46" width="22" height="20" rx="2" fill="#7c3aed"/>
-                  <rect x="48" y="46" width="22" height="20" rx="2" fill="#7c3aed"/>
-                  <rect x="74" y="46" width="22" height="20" rx="2" fill="#7c3aed"/>
-                  <rect x="18" y="64" width="6" height="10" fill="#2a1460"/>
-                  <rect x="96" y="64" width="6" height="10" fill="#2a1460"/>
-                </svg>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card-title">Mid-century sectional sofa</div>
-                <div class="mock-card-price">$450</div>
-              </div>
-            </div>
-            <div class="mock-card">
-              <div class="mock-thumb">
-                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                  <rect width="120" height="90" fill="#fbbf24"/>
-                  <circle cx="38" cy="58" r="18" fill="none" stroke="#451a03" stroke-width="3"/>
-                  <circle cx="82" cy="58" r="18" fill="none" stroke="#451a03" stroke-width="3"/>
-                  <path d="M38 58 L60 42 L82 58 M60 42 L60 30 L70 30" stroke="#451a03" stroke-width="3" fill="none" stroke-linecap="round"/>
-                  <path d="M52 58 L64 42" stroke="#451a03" stroke-width="2"/>
-                  <rect x="58" y="28" width="14" height="3" fill="#451a03"/>
-                </svg>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card-title">Vintage steel road bike</div>
-                <div class="mock-card-price">$320</div>
-              </div>
-            </div>
-            <div class="mock-card r">
-              <div class="mock-thumb">
-                <span class="badge-r">Reserved</span>
-                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                  <rect width="120" height="90" fill="#fef3c7"/>
-                  <circle cx="60" cy="28" r="14" fill="#fde68a" stroke="#78350f" stroke-width="2"/>
-                  <path d="M60 42 L60 68 M50 56 L70 56" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
-                  <rect x="44" y="68" width="32" height="8" fill="#78350f"/>
-                </svg>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card-title">Brass arc floor lamp</div>
-                <div class="mock-card-price">$95</div>
-              </div>
-            </div>
-            <div class="mock-card">
-              <div class="mock-thumb">
-                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                  <rect width="120" height="90" fill="#14b8a6"/>
-                  <rect x="20" y="20" width="80" height="55" rx="3" fill="#0f766e"/>
-                  <rect x="26" y="26" width="68" height="40" fill="#99f6e4"/>
-                  <circle cx="40" cy="40" r="4" fill="#fff"/>
-                  <path d="M26 60 L46 50 L62 56 L94 40 L94 66 Z" fill="#5eead4"/>
-                </svg>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card-title">Film camera, 35mm</div>
-                <div class="mock-card-price">$180</div>
-              </div>
-            </div>
-            <div class="mock-card">
-              <div class="mock-thumb">
-                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                  <rect width="120" height="90" fill="#f87171"/>
-                  <rect x="30" y="28" width="60" height="40" rx="2" fill="#7f1d1d"/>
-                  <rect x="34" y="32" width="52" height="24" fill="#fecaca"/>
-                  <rect x="34" y="58" width="52" height="2" fill="#450a0a"/>
-                  <circle cx="40" cy="63" r="2" fill="#450a0a"/>
-                  <rect x="50" y="62" width="30" height="3" fill="#450a0a"/>
-                </svg>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card-title">Oak dining table, 4-seat</div>
-                <div class="mock-card-price">$220</div>
-              </div>
-            </div>
-            <div class="mock-card">
-              <div class="mock-thumb">
-                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                  <rect width="120" height="90" fill="#84cc16"/>
-                  <rect x="34" y="20" width="52" height="56" rx="3" fill="#365314"/>
-                  <rect x="38" y="24" width="44" height="18" fill="#84cc16"/>
-                  <circle cx="48" cy="33" r="3" fill="#fff"/>
-                  <circle cx="60" cy="33" r="3" fill="#fff"/>
-                  <circle cx="72" cy="33" r="3" fill="#fff"/>
-                  <rect x="42" y="48" width="36" height="3" fill="#65a30d"/>
-                  <rect x="42" y="55" width="36" height="3" fill="#65a30d"/>
-                  <rect x="42" y="62" width="22" height="3" fill="#65a30d"/>
-                </svg>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card-title">Set of 6 vinyl records</div>
-                <div class="mock-card-price">$60</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     HOW IT WORKS
-     ============================================================ -->
-<section id="how">
+<section class="hero" style="border-top: none;">
   <div class="wrap">
-    <div class="section-head">
-      <h2>How it works.</h2>
-      <p>Build a page. Share the link. Take messages. That's the whole thing.</p>
-    </div>
-
-    <div class="how">
-      <div class="steps" id="steps">
-        <div class="step" data-step="0">
-          <div class="step-n">1</div>
-          <div>
-            <div class="step-h">Put your stuff on a page</div>
-            <p class="step-p">Snap a picture, tell Claude what it is and roughly what you want for it. Claude writes the title, description, and tags, and adds it to your sale. You just say yes.</p>
-          </div>
-        </div>
-        <div class="step active" data-step="1">
-          <div class="step-n">2</div>
-          <div>
-            <div class="step-h">Share the link</div>
-            <p class="step-p">One URL for your whole sale. Paste it in your group chat, neighborhood FB, WhatsApp, text your block — wherever you already reach people. You pick who sees it.</p>
-          </div>
-        </div>
-        <div class="step" data-step="2">
-          <div class="step-n">3</div>
-          <div>
-            <div class="step-h">Mark things reserved, hand stuff off</div>
-            <p class="step-p">When a buyer taps Reserve on your page, you get an email. Or tell Claude. "mark the couch reserved for my neighbor". and it's done. You pick the time and take cash or Venmo.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- iPhone mock -->
-      <div class="phone-frame">
-        <div class="phone-screen">
-          <div class="phone-notch"></div>
-          <div class="phone-status">
-            <span>9:41</span>
-            <span class="signal">
-              <span class="bar b1"></span><span class="bar b2"></span><span class="bar b3"></span><span class="bar b4"></span>
-            </span>
-          </div>
-          <div class="claude-chrome">
-            <div class="star">✦</div>
-            <div class="claude-name">Claude</div>
-            <div class="claude-conn">yrdsl.app</div>
-          </div>
-          <div class="chat" id="chat">
-            <!-- Populated by JS with staggered reveal -->
-          </div>
-          <div class="compose">
-            <div class="compose-input">Message Claude…</div>
-            <div class="compose-send">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 3 9-3 9 19-9Z"/><path d="M6 12h16"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
+    <h1>A digital yard sale.</h1>
+    <p class="hero-sub">
+      You list your items, share one URL, and buyers reach out to you directly. That's all it does.
+    </p>
+    <p class="hero-link">
+      See a <a href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener">live example</a>.
+    </p>
+    <div class="shot">
+      <img src="assets/hero-gallery.png" alt="Screenshot of a yrdsl.app sale page" loading="lazy" />
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     FEATURES
-     ============================================================ -->
-<section id="features">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>What makes it different.</h2>
-    </div>
-
-    <div class="features">
-      <div class="feat">
-        <h3 class="feat-h">Bring your own buyers</h3>
-        <p class="feat-p">We don't run an algorithm. We don't send you traffic. In exchange, we don't take a cut, and your sale doesn't get buried under a million other listings. The people who already want your stuff are one link away.</p>
-      </div>
-      <div class="feat">
-        <h3 class="feat-h">No commission</h3>
-        <p class="feat-p">eBay takes 13%. Mercari takes 13%. Facebook takes 5%. yrdsl.app takes nothing. Your buyer pays $100, you get $100.</p>
-      </div>
-      <div class="feat">
-        <h3 class="feat-h">Claude does the writing</h3>
-        <p class="feat-p">Photo + a sentence ("old lamp from my aunt's place, $40?") and Claude writes the title, description, and tags. You just say yes.</p>
-      </div>
-      <div class="feat">
-        <h3 class="feat-h">Buyers contact you directly</h3>
-        <p class="feat-p">You share the link. The people who care reach out straight to you: email, SMS, WhatsApp, whatever you put on the page. No platform inbox, no "is this still available?", no threads to manage.</p>
-      </div>
-      <div class="feat">
-        <h3 class="feat-h">Pennies a month</h3>
-        <p class="feat-p">Free during the invite-only beta. When metered pricing launches, a normal sale will cost about 10 cents a month to host, balances under 50 cents roll forward instead of invoicing, and deleting a sale drops its cost to zero.</p>
-      </div>
-      <div class="feat">
-        <h3 class="feat-h">Apache-2.0 on GitHub</h3>
-        <p class="feat-p">The platform code is public. Read it, run your own copy, or hand your sale off as a ZIP that drops into the self-hosted template. No lock-in, no hostage data.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     PRICING
-     ============================================================ -->
-<section id="pricing">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>Pennies, not percentages.</h2>
-      <p>Big marketplaces take a cut of every sale. We won't. During the invite-only beta, there's no billing at all. When metered pricing launches: a typical sale will cost about ten cents a month to host, balances under 50 cents a month will roll forward instead of invoicing, and deleting a sale drops its cost to zero.</p>
-    </div>
-
-    <div class="pricing-grid">
-      <div class="price-card hero-price">
-        <div class="price-head">A typical sale</div>
-        <div class="price-big">~$0.10<span style="font-size: 20px; opacity: 0.6; margin-left: 8px; font-weight: 400;">/ month</span></div>
-        <p class="price-note">12 items, a few hundred visitors, open for a couple of weekends. Most one-off sellers won't cross the $0.50 billing threshold when metered pricing launches, so they'll run a sale for free. Everything is free during the current invite-only beta.</p>
-      </div>
-
-      <div class="price-card">
-        <div class="price-head">What others charge</div>
-        <div class="rate-list">
-          <div class="rr"><span>eBay</span><b>13% per sale</b></div>
-          <div class="rr"><span>Mercari</span><b>13% per sale</b></div>
-          <div class="rr"><span>Facebook Marketplace</span><b>5% if shipped</b></div>
-          <div class="rr"><span style="font-weight: 600; color: var(--ink);">yrdsl.app</span><b style="color: var(--ink);">$0</b></div>
-        </div>
-        <p class="price-note" style="margin-top: 18px; font-size: 13px;">Sell a $500 couch on eBay, they keep $67. Sell it here, you keep all $500.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     THEMES SWITCHER
-     ============================================================ -->
-<section id="themes">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>Pick a look.</h2>
-      <p>Four themes: conservative, retro, hip, and artsy. Click one to preview.</p>
-    </div>
-
-    <div class="themes-switcher" id="themes-switcher">
-      <button data-theme="conservative" class="active">Conservative</button>
-      <button data-theme="retro">Retro</button>
-      <button data-theme="hip">Hip</button>
-      <button data-theme="artsy">Artsy</button>
-    </div>
-
-    <div class="theme-preview">
-      <div class="theme-stage" id="theme-stage" data-t="conservative">
-        <div class="tp-header">
-          <h3>Spring Purge</h3>
-          <p>everything must go · austin, tx</p>
-        </div>
-        <div class="theme-grid">
-          <div class="tp-card">
-            <div class="tp-thumb">
-              <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                <defs><linearGradient id="tg1" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#6d28d9"/></linearGradient></defs>
-                <rect width="120" height="90" fill="url(#tg1)"/>
-                <rect x="18" y="42" width="84" height="28" rx="4" fill="#3b1e82" opacity="0.85"/>
-                <rect x="22" y="46" width="22" height="20" rx="2" fill="#7c3aed"/>
-                <rect x="48" y="46" width="22" height="20" rx="2" fill="#7c3aed"/>
-                <rect x="74" y="46" width="22" height="20" rx="2" fill="#7c3aed"/>
-              </svg>
-            </div>
-            <div class="tp-body">
-              <div class="tp-title">Mid-century sectional sofa</div>
-              <div class="tp-price">$450</div>
-            </div>
-          </div>
-          <div class="tp-card">
-            <div class="tp-thumb">
-              <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                <rect width="120" height="90" fill="#fbbf24"/>
-                <circle cx="38" cy="58" r="18" fill="none" stroke="#451a03" stroke-width="3"/>
-                <circle cx="82" cy="58" r="18" fill="none" stroke="#451a03" stroke-width="3"/>
-                <path d="M38 58 L60 42 L82 58 M60 42 L60 30 L70 30" stroke="#451a03" stroke-width="3" fill="none" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="tp-body">
-              <div class="tp-title">Vintage steel road bike</div>
-              <div class="tp-price">$320</div>
-            </div>
-          </div>
-          <div class="tp-card">
-            <div class="tp-thumb">
-              <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice">
-                <rect width="120" height="90" fill="#14b8a6"/>
-                <rect x="20" y="20" width="80" height="55" rx="3" fill="#0f766e"/>
-                <rect x="26" y="26" width="68" height="40" fill="#99f6e4"/>
-                <circle cx="40" cy="40" r="4" fill="#fff"/>
-                <path d="M26 60 L46 50 L62 56 L94 40 L94 66 Z" fill="#5eead4"/>
-              </svg>
-            </div>
-            <div class="tp-body">
-              <div class="tp-title">Film camera, 35mm</div>
-              <div class="tp-price">$180</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     OPEN SOURCE CALLOUT
-     ============================================================ -->
 <section>
   <div class="wrap">
-    <div class="oss">
-      <div>
-        <h3>Free and open source.</h3>
-        <p>Apache 2.0 on GitHub. Prefer to run your own? The <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" style="text-decoration: underline;">self-hosted template</a> gives you a single-sale static site on GitHub Pages — see a <a href="https://mreider.github.io/yrdsl-example/" style="text-decoration: underline;">live example</a>. Same JSON shape as the hosted version, so you can move between them. Listed on <a href="https://oss.kuvop.com" style="text-decoration: underline;">oss.kuvop.com</a>, built by Kuvop LLC.</p>
+    <h2>Two ways to run one.</h2>
+    <div class="paths">
+      <div class="path">
+        <h3>Host it yourself.</h3>
+        <p>
+          Clone the template, edit <code>site.json</code> and <code>items.json</code>, push. Deploys free on GitHub Pages. Same data shape as the hosted version, so you can move between them.
+        </p>
+        <a class="cta" href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">
+          github.com/KuvopLLC/yrdsl-self-hosted →
+        </a>
       </div>
-      <a class="oss-cta" href="https://github.com/KuvopLLC/yrdsl" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-        github.com/KuvopLLC/yrdsl
-      </a>
+      <div class="path">
+        <h3>Let us host it.</h3>
+        <p>
+          Sign up, add items in the browser, share the link. Editable from the browser, or over MCP from Claude Desktop. Currently invite-only while the beta is open.
+        </p>
+        <a class="cta" href="https://app.yrdsl.app/signup">
+          Sign up →
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<div class="wrap">
-  <footer>
-    <div>
-      <div class="brand" style="margin-bottom: 12px;">
-        <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
-          <path d="M6 14 L16 4 L26 14 V26 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-          <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
-          <path d="M12 20.5 L18 26.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        yrdsl.app
-      </div>
-      <p style="margin: 0; max-width: 280px;">List your stuff, share one link, keep every dollar.</p>
-    </div>
-    <div>
-      <h5>Product</h5>
-      <ul>
-        <li><a href="#how">How it works</a></li>
-        <li><a href="#features">Why</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#themes">Themes</a></li>
-      </ul>
-    </div>
-    <div>
-      <h5>Project</h5>
-      <ul>
-        <li><a href="https://github.com/KuvopLLC/yrdsl">GitHub</a></li>
-        <li><a href="https://github.com/KuvopLLC/yrdsl-self-hosted">Self-host template</a></li>
-        <li><a href="https://mreider.github.io/yrdsl-example/">Live example</a></li>
-        <li><a href="https://oss.kuvop.com">Kuvop OSS</a></li>
-      </ul>
-    </div>
-    <div>
-      <h5>Legal</h5>
-      <ul>
-        <li><a href="mailto:mreider@gmail.com">Contact</a></li>
-        <li><a href="/privacy">Privacy</a></li>
-        <li><a href="/terms">Terms</a></li>
-      </ul>
-    </div>
-    <div class="legal">
-      <span>© 2026 Kuvop LLC · Apache 2.0 · <a href="https://oss.kuvop.com" style="text-decoration: underline;">oss.kuvop.com</a></span>
-      <span>Made with too many spare weekends.</span>
-    </div>
-  </footer>
-</div>
+<section class="cost">
+  <div class="wrap">
+    <h2>What it costs.</h2>
+    <p>Self-hosted is free forever on GitHub Pages.</p>
+    <p>
+      Hosted is free during the invite-only beta. When metered pricing launches, a typical sale runs about $0.10/month. Balances under $0.50 roll forward instead of invoicing, and deleting a sale drops its cost to zero.
+    </p>
+    <p>No commission on any sale.</p>
+  </div>
+</section>
 
-<!-- ============================================================
-     TWEAKS PANEL
-     ============================================================ -->
-<div class="tweaks" id="tweaks">
-  <h4>Tweaks</h4>
-  <div class="trow">
-    <span>Headline</span>
-    <select id="tw-headline">
-      <option value="phone">Yard sale, online</option>
-      <option value="hundred">Keep every dollar</option>
-      <option value="metered">Pennies a month</option>
-      <option value="local">Own your sale</option>
-    </select>
-  </div>
-  <div class="trow">
-    <span>Dark mode</span>
-    <label class="tcheck"><input type="checkbox" id="tw-dark"/></label>
-  </div>
-  <div class="trow">
-    <span>Show pricing</span>
-    <label class="tcheck"><input type="checkbox" id="tw-pricing" checked/></label>
-  </div>
-  <div class="trow">
-    <span>Auto theme demo</span>
-    <label class="tcheck"><input type="checkbox" id="tw-auto"/></label>
-  </div>
-</div>
+<footer class="wrap">
+  <span>© 2026 Kuvop LLC · Apache 2.0 · <a href="https://oss.kuvop.com" target="_blank" rel="noopener">oss.kuvop.com</a></span>
+  <span class="links">
+    <a href="https://github.com/KuvopLLC/yrdsl" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">Self-host template</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="mailto:mreider@gmail.com">Contact</a>
+  </span>
+</footer>
 
 <script>
-/* ============================================================
-   Tweaks persistence block (for host EDITMODE)
-   ============================================================ */
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "headline": "phone",
-  "dark": false,
-  "showPricing": true,
-  "autoTheme": false
-}/*EDITMODE-END*/;
-let tweaks = { ...TWEAK_DEFAULTS };
-
-/* ---------------- Month label ---------------- */
-(function () {
-  const m = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
-  const el = document.getElementById("this-month");
-  if (el) el.textContent = m;
-})();
-
-/* ---------------- Theme switcher ---------------- */
-const stage = document.getElementById("theme-stage");
-const switcher = document.getElementById("themes-switcher");
-function setTheme(t) {
-  stage.dataset.t = t;
-  switcher.querySelectorAll("button").forEach(b => {
-    b.classList.toggle("active", b.dataset.theme === t);
-  });
-}
-switcher.addEventListener("click", (e) => {
-  const b = e.target.closest("button[data-theme]");
-  if (b) setTheme(b.dataset.theme);
-});
-
-/* ---------------- Steps + chat ---------------- */
-const steps = [...document.querySelectorAll(".step")];
-const chatEl = document.getElementById("chat");
-
-const chatScripts = {
-  0: [
-    { t: "user", html: "<div class='photo'></div>selling this old couch, maybe $200" },
-    { t: "ai", html: "Added to your sale:<div class='listing-preview'><div class='lp-thumb'></div><div class='lp-title'>Mid-century sectional sofa</div><div class='lp-price'>$200</div><div class='lp-tags'>furniture · vintage</div></div>" },
-    { t: "user", html: "perfect" },
-  ],
-  1: [
-    { t: "user", html: "give me a quick blurb for my group chat" },
-    { t: "ai", html: "Try this:<div class='listing-preview'><div class='lp-title'>Cleaning out the garage this weekend.</div><div class='lp-tags'>First crack for anyone on this chat:</div><div class='lp-title' style='font-family:monospace;font-size:12px;margin-top:6px;'>yrdsl.app/matt/spring-purge</div></div>" },
-    { t: "user", html: "copied 👍" },
-  ],
-  2: [
-    { t: "user", html: "my neighbor's gonna buy the couch tomorrow, mark it reserved" },
-    { t: "ai", html: "Done. the couch is now marked <b>Reserved</b>. It'll still show on your sale page but nobody else can claim it." },
-    { t: "user", html: "thx" },
-  ]
-};
-
-function renderChat(stepIdx) {
-  chatEl.innerHTML = "";
-  const msgs = chatScripts[stepIdx] || [];
-  msgs.forEach((m, i) => {
-    const el = document.createElement("div");
-    if (m.t === "user" || m.t === "ai") {
-      el.className = "msg " + m.t;
-      el.innerHTML = m.html;
-    } else if (m.t === "tool") {
-      el.className = "tool-call";
-      el.innerHTML = `<div><span class="tool-name">${m.name}</span><span class="tool-args">(${m.args})</span></div>` +
-        `<div class="tool-ok">✓ ${m.ok}</div>`;
-    }
-    el.style.opacity = "0";
-    el.style.transform = "translateY(6px)";
-    el.style.transition = "opacity .3s ease, transform .3s ease";
-    chatEl.appendChild(el);
-    setTimeout(() => {
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0)";
-    }, 120 + i * 260);
-  });
-}
-
-function activateStep(idx) {
-  steps.forEach((s, i) => s.classList.toggle("active", i === idx));
-  renderChat(idx);
-}
-steps.forEach((s, i) => {
-  s.addEventListener("click", () => activateStep(i));
-});
-activateStep(1); // open on step 2 (share the link) — the new hero demo
-
-// Auto-cycle steps
-let stepIdx = 1;
-let stepTimer;
-function startStepCycle() {
-  stopStepCycle();
-  stepTimer = setInterval(() => {
-    stepIdx = (stepIdx + 1) % 3;
-    activateStep(stepIdx);
-  }, 6500);
-}
-function stopStepCycle() { clearInterval(stepTimer); }
-// Pause cycle when user clicks
-steps.forEach(s => s.addEventListener("click", stopStepCycle));
-// Start cycle when how section scrolls into view
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) startStepCycle();
-    else stopStepCycle();
-  });
-}, { threshold: 0.3 });
-io.observe(document.getElementById("how"));
-
-/* ---------------- Dark mode ---------------- */
 const modeBtn = document.getElementById("mode");
-function applyDark(on) {
+const stored = localStorage.getItem("yrdsl-dark");
+if (stored === "true") document.documentElement.setAttribute("data-dark", "true");
+modeBtn.addEventListener("click", () => {
+  const on = document.documentElement.getAttribute("data-dark") !== "true";
   document.documentElement.setAttribute("data-dark", String(on));
-  tweaks.dark = on;
-  const cb = document.getElementById("tw-dark");
-  if (cb) cb.checked = on;
-}
-modeBtn.addEventListener("click", () => applyDark(document.documentElement.getAttribute("data-dark") !== "true"));
-
-/* ---------------- Tweaks ---------------- */
-const HEADLINES = {
-  phone: { h: 'Like a yard sale. <em>On the internet.</em>', s: "Not a marketplace like eBay or Facebook. We don't send you buyers. Your neighbors, coworkers, and group chats do. We just give you the page to point them at." },
-  hundred: { h: 'Sell your stuff. <em>Keep every dollar.</em>', s: "eBay takes 13%. Mercari takes 13%. We take 0%. Sell a $500 couch and you keep $500, not $433." },
-  metered: { h: 'Your own little shop. <em>For pennies a month.</em>', s: "Free during the invite-only beta. When metered pricing launches, a normal yard sale will cost about fifteen cents a month to host. Delete it when the couch is gone and the cost drops to zero." },
-  local: { h: 'Own your sale, <em>not the platform.</em>', s: "No ads, no algorithm, no one telling you to boost your post. Just your stuff at one clean link you can share anywhere." }
-};
-function applyHeadline(k) {
-  const v = HEADLINES[k]; if (!v) return;
-  document.getElementById("headline").innerHTML = v.h;
-  document.getElementById("subheadline").innerHTML = v.s;
-  tweaks.headline = k;
-}
-document.getElementById("tw-headline").addEventListener("change", e => applyHeadline(e.target.value));
-document.getElementById("tw-dark").addEventListener("change", e => applyDark(e.target.checked));
-document.getElementById("tw-pricing").addEventListener("change", e => {
-  const el = document.getElementById("pricing");
-  el.style.display = e.target.checked ? "" : "none";
-  tweaks.showPricing = e.target.checked;
-});
-let autoThemeTimer;
-function setAutoTheme(on) {
-  tweaks.autoTheme = on;
-  clearInterval(autoThemeTimer);
-  if (on) {
-    const order = ["conservative", "artsy", "hip", "retro"];
-    let i = order.indexOf(stage.dataset.t);
-    autoThemeTimer = setInterval(() => {
-      i = (i + 1) % order.length;
-      setTheme(order[i]);
-    }, 2800);
-  }
-}
-document.getElementById("tw-auto").addEventListener("change", e => setAutoTheme(e.target.checked));
-
-/* Persistence: when tweaks state changes, persist via host */
-function persist() {
-  window.parent?.postMessage({ type: "__edit_mode_set_keys", edits: tweaks }, "*");
-}
-// Listen for host messages + announce availability
-window.addEventListener("message", (e) => {
-  if (e.data?.type === "__activate_edit_mode") document.getElementById("tweaks").classList.add("open");
-  if (e.data?.type === "__deactivate_edit_mode") document.getElementById("tweaks").classList.remove("open");
-});
-window.parent?.postMessage({ type: "__edit_mode_available" }, "*");
-
-// Apply initial defaults
-applyHeadline(tweaks.headline);
-applyDark(tweaks.dark);
-document.getElementById("tw-headline").value = tweaks.headline;
-document.getElementById("tw-pricing").checked = tweaks.showPricing;
-document.getElementById("tw-auto").checked = tweaks.autoTheme;
-if (tweaks.autoTheme) setAutoTheme(true);
-if (!tweaks.showPricing) document.getElementById("pricing").style.display = "none";
-
-/* Persist any time a tweak changes */
-["tw-headline","tw-dark","tw-pricing","tw-auto"].forEach(id => {
-  document.getElementById(id).addEventListener("change", persist);
+  localStorage.setItem("yrdsl-dark", String(on));
 });
 </script>
 </body>
