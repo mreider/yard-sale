@@ -1,0 +1,13 @@
+{
+  "name": "@yrdsl/landing",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Marketing landing page for yrdsl.app (GH Pages).",
+  "scripts": {
+    "build": "echo 'static site. nothing to build' && exit 0",
+    "dev": "npx -y serve@latest -l 4173 .",
+    "typecheck": "echo 'no ts' && exit 0",
+    "test": "echo 'no unit tests; covered by Playwright' && exit 0",
+    "clean": "rm -rf .turbo"
+  }
+}

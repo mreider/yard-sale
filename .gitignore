@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+out/
+.output/
+.turbo/
+.wrangler/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Local environment
+.env
+.env.local
+.env.*.local
+.dev.vars
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
+*.pid
+
+# Claude Code agent state
+.claude/
+/Support/

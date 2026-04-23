@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yrdsl.app · a digital yard sale</title>
+<meta name="description" content="A digital yard sale, built for Claude. Drop in your photos and Claude writes the listings. Self-host on GitHub Pages, or let us host it for pennies a month. Open source." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f5f5f4;
+  --ink: #18181b;
+  --ink-2: #3f3f46;
+  --muted: #71717a;
+  --line: #e7e5e4;
+  --line-2: #d6d3d1;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(24,24,27,.04);
+  --shadow-md: 0 8px 24px -8px rgba(24,24,27,.12);
+}
+html[data-dark="true"] {
+  --bg: #0d0d0e;
+  --surface: #151517;
+  --surface-2: #1d1d21;
+  --ink: #f4f4f5;
+  --ink-2: #d4d4d8;
+  --muted: #a1a1aa;
+  --line: #27272a;
+  --line-2: #3f3f46;
+  --shadow-md: 0 8px 24px -8px rgba(0,0,0,.6);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; padding: 0; }
+a { color: inherit; text-decoration: none; }
+code { font-family: "JetBrains Mono", monospace; font-size: 0.92em; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); }
+::selection { background: var(--ink); color: var(--bg); }
+
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+/* Nav */
+.nav {
+  position: sticky; top: 0; z-index: 30;
+  background: color-mix(in oklab, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  gap: 24px;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-weight: 600; letter-spacing: -0.01em; font-size: 16px;
+}
+.nav-right { display: flex; align-items: center; gap: 16px; font-size: 14px; color: var(--muted); }
+.nav-right a { transition: color .12s; }
+.nav-right a:hover { color: var(--ink); }
+.nav-cta {
+  padding: 6px 12px;
+  background: var(--ink);
+  color: var(--bg) !important;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 13px;
+  transition: opacity .12s, transform .08s;
+}
+.nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.mode { display: inline-flex; align-items: center; gap: 8px; }
+.mode svg { color: var(--muted); transition: color .15s; }
+.mode .sun { color: var(--ink); }
+html[data-dark="true"] .mode .sun { color: var(--muted); }
+html[data-dark="true"] .mode .moon { color: var(--ink); }
+.mode-toggle {
+  width: 34px; height: 20px;
+  border-radius: 999px;
+  background: var(--line);
+  position: relative;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+.mode-toggle::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--surface);
+  transition: left .15s;
+  box-shadow: var(--shadow-sm);
+}
+html[data-dark="true"] .mode-toggle { background: var(--line-2); }
+html[data-dark="true"] .mode-toggle::after { left: 16px; }
+
+/* Hero */
+.hero { padding: 64px 0 40px; }
+@media (max-width: 720px) { .hero { padding: 40px 0 32px; } }
+h1 {
+  font-size: clamp(32px, 4.5vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+.hero-sub {
+  font-size: 17px;
+  color: var(--ink-2);
+  margin: 0 0 20px;
+  max-width: 620px;
+}
+.hero-link {
+  font-size: 14px; color: var(--muted);
+}
+.hero-link a { border-bottom: 1px solid var(--line-2); padding-bottom: 1px; transition: color .12s, border-color .12s; }
+.hero-link a:hover { color: var(--ink); border-color: var(--ink); }
+
+.shot {
+  display: block;
+  margin-top: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: var(--surface);
+  transition: box-shadow .15s, transform .15s;
+}
+.shot:hover { box-shadow: 0 20px 40px -16px rgba(24,24,27,.2); transform: translateY(-1px); }
+html[data-dark="true"] .shot:hover { box-shadow: 0 20px 40px -16px rgba(0,0,0,.7); }
+.shot img { width: 100%; height: auto; display: block; }
+
+/* Two paths */
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+@media (max-width: 720px) { section { padding: 40px 0; } }
+h2 {
+  font-size: clamp(22px, 2.5vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 24px;
+}
+.paths {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 720px) { .paths { grid-template-columns: 1fr; } }
+.path {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px 24px 20px;
+  display: flex; flex-direction: column;
+}
+.path h3 { font-size: 17px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+.path p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.6; }
+.path p.prompt-caption { font-size: 13px; color: var(--muted); margin: 0; }
+.path p.prompt-caption a { border-bottom: 1px dotted var(--line-2); transition: color .12s, border-color .12s; }
+.path p.prompt-caption a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.path .cta {
+  margin-top: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 500;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 1px;
+  align-self: flex-start;
+  transition: opacity .12s;
+}
+.path .cta:hover { opacity: 0.7; }
+
+.snippet {
+  margin: 0;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  overflow-x: auto;
+}
+.snippet code { background: none; border: none; padding: 0; font-size: inherit; }
+
+.chat {
+  margin: 0 0 12px;
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+  font-size: 12.5px; line-height: 1.5;
+}
+.chat .bubble { max-width: 88%; padding: 9px 12px; border-radius: 12px; }
+.chat .bubble.u {
+  align-self: flex-end;
+  background: var(--ink); color: var(--bg);
+  border-bottom-right-radius: 3px;
+}
+.chat .bubble.c {
+  align-self: flex-start;
+  background: var(--surface-2); color: var(--ink);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 3px;
+}
+.chat .photos { display: flex; gap: 4px; margin-bottom: 6px; }
+.chat .photos .ph { width: 44px; height: 34px; border-radius: 4px; }
+.chat .ph.bike { background: linear-gradient(135deg, #6b7280, #374151); }
+.chat .ph.lamp { background: linear-gradient(135deg, #a3a3a3, #52525b); }
+.chat .listing {
+  margin-top: 8px;
+  display: flex; gap: 8px; align-items: center;
+  padding: 6px 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.chat .listing .thumb { width: 30px; height: 30px; border-radius: 3px; flex-shrink: 0; }
+.chat .listing .thumb.bike { background: linear-gradient(135deg, #6b7280, #374151); }
+.chat .listing .meta { display: flex; flex-direction: column; gap: 1px; line-height: 1.25; }
+.chat .listing .t { font-size: 11px; font-weight: 500; color: var(--ink); }
+.chat .listing .p { font-size: 11px; font-weight: 600; color: var(--ink); }
+
+/* End CTA */
+.cta-end { text-align: center; }
+.cta-end h2 { margin-bottom: 8px; }
+.cta-end p { font-size: 15px; color: var(--ink-2); margin: 0 0 24px; }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
+  background: var(--ink); color: var(--bg);
+  border-radius: 8px;
+  font-size: 15px; font-weight: 500;
+  transition: transform .08s, opacity .12s;
+}
+.cta-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+
+/* Footer */
+footer {
+  padding: 40px 0 60px;
+  border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 13px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+footer a { border-bottom: 1px dotted var(--line-2); transition: color .12s, border-color .12s; }
+footer a:hover { color: var(--ink); border-color: var(--ink); }
+footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="/">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+        <path d="M6 14 L16 4 L26 14 V26 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
+        <path d="M12 20.5 L18 26.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      yrdsl.app
+    </a>
+    <div class="nav-right">
+      <a href="https://app.yrdsl.app/login">Sign in</a>
+      <a class="nav-cta" href="https://app.yrdsl.app/signup">Sign up</a>
+      <span class="mode">
+        <svg class="sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        <button class="mode-toggle" id="mode" aria-label="Toggle dark mode"></button>
+        <svg class="moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" style="border-top: none;">
+  <div class="wrap">
+    <h1>A digital yard sale, built for Claude.</h1>
+    <p class="hero-sub">
+      Drop in your photos, it writes the listings. Share the link. Buyers reserve what they want. Host it free on your own GitHub, or let us host it for pennies. Hand-editing works too. All open source.
+    </p>
+    <p class="hero-link">
+      See a <a href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener">live example</a>.
+    </p>
+    <a class="shot" href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener" aria-label="Open the live example">
+      <img src="assets/hero-gallery.png" alt="Screenshot of a yrdsl.app sale page showing 6 items in a grid" loading="lazy" />
+    </a>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Two ways to host it.</h2>
+    <div class="paths">
+      <div class="path">
+        <h3>Host it yourself.</h3>
+        <p>
+          Fork the template and push to GitHub Pages. Free. Same data shape as the hosted version, so you can move between them.
+        </p>
+        <a class="cta" href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">
+          github.com/KuvopLLC/yrdsl-self-hosted →
+        </a>
+      </div>
+      <div class="path">
+        <h3>Let us host it.</h3>
+        <p>
+          Sign up, add items, share the link. Free during the invite-only beta; about $0.10 a month after. No commission on any sale.
+        </p>
+        <a class="cta" href="https://app.yrdsl.app/signup">
+          Sign up →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Two ways to build it.</h2>
+    <div class="paths">
+      <div class="path">
+        <h3>With Claude.</h3>
+        <p>
+          Connect over MCP from Claude Desktop and ask it what you'd ask a friend:
+        </p>
+        <div class="chat" aria-hidden="true">
+          <div class="bubble u">
+            <div class="photos">
+              <div class="ph bike"></div>
+              <div class="ph lamp"></div>
+            </div>
+            Here are photos of stuff I'm selling. Add them to my sale and suggest prices.
+          </div>
+          <div class="bubble c">
+            Added 2 items.
+            <div class="listing">
+              <div class="thumb bike"></div>
+              <div class="meta">
+                <div class="t">Vintage road bike, 56cm</div>
+                <div class="p">$320</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="prompt-caption">
+          Published as <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> on npm. Works with either hosting option.
+        </p>
+      </div>
+      <div class="path">
+        <h3>By hand.</h3>
+        <p>
+          Edit two JSON files: <code>site.json</code> for the sale, <code>items.json</code> for the stuff. Clean data shape, no lock-in.
+        </p>
+        <pre class="snippet"><code>{
+  "title": "Vintage road bike, 56cm",
+  "price": 320,
+  "image": "photos/bike.jpg",
+  "tags": ["bikes", "outdoor"]
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-end">
+  <div class="wrap">
+    <h2>Start a sale.</h2>
+    <p>Free during the invite-only beta.</p>
+    <a class="cta-btn" href="https://app.yrdsl.app/signup">Sign up &rarr;</a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>© 2026 Kuvop LLC · Apache 2.0 · <a href="https://oss.kuvop.com" target="_blank" rel="noopener">oss.kuvop.com</a></span>
+  <span class="links">
+    <a href="https://github.com/KuvopLLC/yrdsl" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">Self-host template</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="mailto:mreider@gmail.com">Contact</a>
+  </span>
+</footer>
+
+<script>
+const modeBtn = document.getElementById("mode");
+const stored = localStorage.getItem("yrdsl-dark");
+if (stored === "true") document.documentElement.setAttribute("data-dark", "true");
+modeBtn.addEventListener("click", () => {
+  const on = document.documentElement.getAttribute("data-dark") !== "true";
+  document.documentElement.setAttribute("data-dark", String(on));
+  localStorage.setItem("yrdsl-dark", String(on));
+});
+</script>
+</body>
+</html>

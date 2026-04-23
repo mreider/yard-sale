@@ -1,0 +1,35 @@
+{
+  "name": "yrdsl",
+  "version": "0.0.0",
+  "private": true,
+  "description": "yrdsl.app: metered, claude-native, open source.",
+  "license": "Apache-2.0",
+  "author": "Matt Reider <mreider@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KuvopLLC/yrdsl.git"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:unit": "vitest run",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.10.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0",
+    "wrangler": "^4.0.0"
+  },
+  "workspaces": ["apps/*", "packages/*", "services/*"]
+}

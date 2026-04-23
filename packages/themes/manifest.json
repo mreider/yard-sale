@@ -1,0 +1,28 @@
+{
+  "themes": [
+    {
+      "id": "conservative",
+      "displayName": "Conservative",
+      "description": "Neutral grays, system sans, restrained. The default.",
+      "stylesheet": "./conservative/styles.css"
+    },
+    {
+      "id": "retro",
+      "displayName": "Retro",
+      "description": "70s garage-sale poster aesthetic. Warm palette, slab serif, grain texture.",
+      "stylesheet": "./retro/styles.css"
+    },
+    {
+      "id": "hip",
+      "displayName": "Hip",
+      "description": "Bold color, sans display, high-contrast, dense grid.",
+      "stylesheet": "./hip/styles.css"
+    },
+    {
+      "id": "artsy",
+      "displayName": "Artsy",
+      "description": "Editorial, serif display, generous whitespace, image-forward.",
+      "stylesheet": "./artsy/styles.css"
+    }
+  ]
+}

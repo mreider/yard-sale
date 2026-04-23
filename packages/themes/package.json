@@ -1,0 +1,21 @@
+{
+  "name": "@yrdsl/themes",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The four yard sale themes: conservative, artsy, hip, retro.",
+  "type": "module",
+  "main": "./manifest.json",
+  "exports": {
+    ".": "./manifest.json",
+    "./conservative": "./conservative/styles.css",
+    "./artsy": "./artsy/styles.css",
+    "./hip": "./hip/styles.css",
+    "./retro": "./retro/styles.css"
+  },
+  "scripts": {
+    "build": "echo 'themes are plain CSS' && exit 0",
+    "typecheck": "echo 'no ts yet' && exit 0",
+    "test": "echo 'no tests yet' && exit 0",
+    "clean": "rm -rf dist"
+  }
+}

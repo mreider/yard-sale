@@ -1,0 +1,83 @@
+{
+  "manifest_version": "0.3",
+  "name": "yrdsl",
+  "display_name": "yrdsl.app",
+  "version": "0.4.6",
+  "description": "Edit your yrdsl.app sales from Claude Desktop. Add items from product URLs or photos (including photos you paste right into chat), attach/delete/reorder images, publish, mark things reserved. Every response includes a shareable link.",
+  "author": {
+    "name": "Matt Reider",
+    "email": "mreider@gmail.com",
+    "url": "https://yrdsl.app"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://yrdsl.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KuvopLLC/yrdsl"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "YRDSL_MODE": "hosted",
+        "YRDSL_API_URL": "https://api.yrdsl.app",
+        "YRDSL_API_TOKEN": "${user_config.api_token}"
+      }
+    }
+  },
+  "user_config": {
+    "api_token": {
+      "type": "string",
+      "title": "API token",
+      "description": "Starts with yrs_live_. Create one at https://app.yrdsl.app/connect. One token covers all your sales.",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "tools": [
+    { "name": "list_sales", "description": "List all your sales" },
+    { "name": "create_sale", "description": "Create a new sale" },
+    { "name": "get_site", "description": "Read sale metadata (name, theme, contact, etc.)" },
+    { "name": "update_site", "description": "Update sale metadata" },
+    { "name": "list_items", "description": "List items in the sale" },
+    { "name": "recent_items", "description": "List the N most-recently-added items" },
+    {
+      "name": "find_item",
+      "description": "Find items by substring in title, tags, or description"
+    },
+    { "name": "get_item", "description": "Read one item's full details" },
+    {
+      "name": "draft_item_from_url",
+      "description": "Turn a product URL into a draft item (title, description, price, image)"
+    },
+    { "name": "add_item", "description": "Add a new item" },
+    {
+      "name": "attach_image_from_url",
+      "description": "Attach an image to an item by URL (server-side fetch)"
+    },
+    {
+      "name": "attach_image_from_path",
+      "description": "Attach an image by local file path. Best for real photos on Claude Code; fails on Claude.ai sandbox paths."
+    },
+    {
+      "name": "attach_image_bytes",
+      "description": "Attach an image by raw base64 bytes. Truncated by Claude Desktop/web for non-tiny images — prefer attach_image_from_path or the web editor."
+    },
+    {
+      "name": "delete_image",
+      "description": "Remove a specific photo from an item (keeps the item)."
+    },
+    { "name": "update_item", "description": "Update an existing item" },
+    { "name": "delete_item", "description": "Delete an item" },
+    { "name": "mark_reserved", "description": "Mark an item reserved for a buyer" },
+    { "name": "unreserve", "description": "Clear the reservation on an item" },
+    { "name": "publish", "description": "Publish the sale so buyers can see it" },
+    { "name": "unpublish", "description": "Revert the sale to draft" }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"]
+  }
+}

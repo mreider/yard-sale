@@ -1,0 +1,38 @@
+name: Refresh self-hosted vendor
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/viewer/src/**'
+      - 'packages/core/src/schemas/sale.ts'
+      - 'scripts/refresh-self-hosted-vendor.sh'
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+concurrency:
+  group: vendor-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure git identity
+        run: |
+          git config --global user.name "Matt"
+          git config --global user.email "mreider@gmail.com"
+
+      - name: Run refresh
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_TEMPLATE }}
+        run: ./scripts/refresh-self-hosted-vendor.sh
+
+# Requires a PAT in secrets named GH_PAT_TEMPLATE scoped to push +
+# create PRs on KuvopLLC/yrdsl-self-hosted. The default GITHUB_TOKEN
+# can't push to a different repo — hence the PAT.

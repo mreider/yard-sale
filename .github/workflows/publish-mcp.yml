@@ -1,0 +1,139 @@
+name: Publish @yrdsl/mcp
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/mcp/src/**'
+      - 'packages/mcp/package.json'
+      - 'packages/mcp/manifest.json'
+      - 'packages/mcp/tsconfig.json'
+      - 'packages/mcp/README.md'
+      - '.github/workflows/publish-mcp.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: publish-mcp
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Check whether version is already published
+        id: version
+        run: |
+          pkg_ver=$(node -e "console.log(require('./packages/mcp/package.json').version)")
+          echo "version=${pkg_ver}" >> "$GITHUB_OUTPUT"
+          echo "tag=mcp-v${pkg_ver}" >> "$GITHUB_OUTPUT"
+          if npm view "@yrdsl/mcp@${pkg_ver}" version >/dev/null 2>&1; then
+            echo "@yrdsl/mcp@${pkg_ver} is already on npm — nothing to publish."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "@yrdsl/mcp@${pkg_ver} not on npm yet — will publish."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Sync manifest.json version
+        if: steps.version.outputs.skip == 'false'
+        run: |
+          cd packages/mcp
+          node -e "
+            const fs = require('fs');
+            const j = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
+            j.version = '${{ steps.version.outputs.version }}';
+            fs.writeFileSync('manifest.json', JSON.stringify(j, null, 2) + '\n');
+          "
+
+      - name: Install workspace dependencies
+        if: steps.version.outputs.skip == 'false'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build @yrdsl/mcp
+        if: steps.version.outputs.skip == 'false'
+        run: pnpm --filter @yrdsl/mcp build
+
+      - name: Stage + pack .mcpb bundle
+        if: steps.version.outputs.skip == 'false'
+        run: |
+          # mcpb pack needs a flat node_modules, not pnpm's symlinked one.
+          # Copy the built package into a scratch dir, install runtime deps
+          # there with npm, then pack.
+          STAGE=/tmp/mcpb-stage
+          rm -rf "$STAGE"
+          mkdir -p "$STAGE"
+          cp -r packages/mcp/dist "$STAGE/dist"
+          cp packages/mcp/package.json "$STAGE/"
+          cp packages/mcp/manifest.json "$STAGE/"
+          cp packages/mcp/README.md "$STAGE/"
+          cp packages/mcp/LICENSE "$STAGE/"
+          cd "$STAGE"
+          # Remove devDependencies so `npm install` doesn't pull vitest etc.
+          node -e "
+            const fs = require('fs');
+            const p = JSON.parse(fs.readFileSync('package.json','utf8'));
+            delete p.devDependencies;
+            delete p.scripts;
+            fs.writeFileSync('package.json', JSON.stringify(p, null, 2));
+          "
+          npm install --omit=dev --no-package-lock --silent
+          npx -y @anthropic-ai/mcpb pack .
+          # mcpb pack outputs <name>-<version>.mcpb; rename to a stable
+          # name so releases/latest/download/yrdsl-mcp.mcpb works.
+          mv *.mcpb "$GITHUB_WORKSPACE/yrdsl-mcp.mcpb"
+          ls -la "$GITHUB_WORKSPACE/yrdsl-mcp.mcpb"
+
+      - name: Publish to npm
+        id: npm
+        if: steps.version.outputs.skip == 'false'
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is missing or expired."
+            echo "::error::Create an Automation token at https://www.npmjs.com/settings/mreider/tokens"
+            echo "::error::then run: gh secret set NPM_TOKEN -R KuvopLLC/yrdsl"
+            exit 1
+          fi
+          cd packages/mcp
+          npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Tag release
+        if: steps.version.outputs.skip == 'false'
+        run: |
+          git tag ${{ steps.version.outputs.tag }}
+          git push origin ${{ steps.version.outputs.tag }}
+
+      - name: Create GitHub release
+        if: steps.version.outputs.skip == 'false'
+        # Release creation is a nice-to-have for the .mcpb download;
+        # don't block the job (or the Smoke MCP trigger) on GitHub's
+        # occasional "Error updating policy" upload flake.
+        continue-on-error: true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          files: yrdsl-mcp.mcpb
