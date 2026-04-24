@@ -1,6 +1,6 @@
 {
   "name": "@yrdsl/mcp",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "MCP server for yrdsl.app. Talks to either the hosted API (api.yrdsl.app) or a local self-hosted repo. Lets Claude add, edit, and reserve items on a digital yard sale.",
   "type": "module",
   "main": "./dist/index.js",
@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "sharp": "^0.34.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {

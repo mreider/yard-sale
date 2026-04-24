@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { decodeImageData } from './hosted.js';
+import { normalizeImage } from './image-normalize.js';
 import type {
   AddItemInput,
   Backend,
@@ -169,8 +170,10 @@ export class LocalFileBackend implements Backend {
     const idx = this.findIdx(items, id);
     const item = items[idx] as SaleItem;
 
-    const { bytes, ext } = await fetchImageBytes(url);
-    const relPath = this.writePhoto(id, bytes, ext);
+    const { bytes: rawBytes, mime: rawMime } = await fetchImageBytes(url);
+    const { bytes, mime } = await normalizeImage(rawBytes, rawMime);
+    const ext = LOCAL_MIME_EXTS[mime] ?? 'bin';
+    const relPath = this.writePhoto(id, Buffer.from(bytes), ext);
 
     const next: SaleItem = {
       ...item,
@@ -191,9 +194,10 @@ export class LocalFileBackend implements Backend {
     const idx = this.findIdx(items, id);
     const item = items[idx] as SaleItem;
 
-    const { bytes, mime } = decodeImageData(data, opts.mime);
+    const { bytes: rawBytes, mime: rawMime } = decodeImageData(data, opts.mime);
+    const { bytes, mime } = await normalizeImage(rawBytes, rawMime);
     const ext = LOCAL_MIME_EXTS[mime] ?? 'bin';
-    const relPath = this.writePhoto(id, bytes, ext);
+    const relPath = this.writePhoto(id, Buffer.from(bytes), ext);
 
     const next: SaleItem = {
       ...item,
@@ -225,14 +229,15 @@ export class LocalFileBackend implements Backend {
       );
     }
     const buf = readFileSync(path);
-    const mime = detectLocalImageMime(buf);
-    if (!mime) {
+    const rawMime = detectLocalImageMime(buf);
+    if (!rawMime) {
       throw new Error(
         `attach_image_from_path: "${path}" isn't a JPEG, PNG, or WebP (magic bytes).`,
       );
     }
+    const { bytes, mime } = await normalizeImage(buf, rawMime);
     const ext = LOCAL_MIME_EXTS[mime] ?? 'bin';
-    const relPath = this.writePhoto(id, buf, ext);
+    const relPath = this.writePhoto(id, Buffer.from(bytes), ext);
     const next: SaleItem = {
       ...item,
       images: [...(item.images ?? (item.image ? [item.image] : [])), relPath],
@@ -442,7 +447,9 @@ function detectLocalImageMime(buf: Uint8Array): string | null {
  * that the hosted endpoint has doesn't apply. Still reject non-http(s)
  * schemes (no file://) and enforce a sane size cap.
  */
-async function fetchImageBytes(rawUrl: string): Promise<{ bytes: Buffer; ext: string }> {
+async function fetchImageBytes(
+  rawUrl: string,
+): Promise<{ bytes: Buffer; mime: string; ext: string }> {
   let url: URL;
   try {
     url = new URL(rawUrl);
@@ -471,5 +478,5 @@ async function fetchImageBytes(rawUrl: string): Promise<{ bytes: Buffer; ext: st
   if (arr.byteLength > LOCAL_IMAGE_MAX_BYTES) {
     throw new Error(`Image too large: ${arr.byteLength} bytes (max ${LOCAL_IMAGE_MAX_BYTES}).`);
   }
-  return { bytes: Buffer.from(arr), ext };
+  return { bytes: Buffer.from(arr), mime, ext };
 }
