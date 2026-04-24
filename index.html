@@ -157,6 +157,10 @@ h2 {
   gap: 20px;
 }
 @media (max-width: 720px) { .paths { grid-template-columns: 1fr; } }
+/* Stack variant for sections that contain full-width screenshots,
+   so the images render at the full tile width instead of being
+   squeezed into a 2-column grid where screenshot text is unreadable. */
+.paths.paths-stacked { grid-template-columns: 1fr; gap: 24px; }
 .path {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -337,7 +341,7 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 <section>
   <div class="wrap">
     <h2>Add and edit items.</h2>
-    <div class="paths">
+    <div class="paths paths-stacked">
       <div class="path">
         <h3>Chat with Claude.</h3>
         <p>
