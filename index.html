@@ -195,6 +195,16 @@ h2 {
 }
 .snippet code { background: none; border: none; padding: 0; font-size: inherit; }
 
+.path-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  margin: 0 0 10px;
+}
+
 .chat {
   margin: 0 0 12px;
   padding: 14px;
@@ -314,7 +324,7 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
       <div class="path">
         <h3>Let us host it.</h3>
         <p>
-          Sign up, add items, share a short URL like <code>yrdsl.app/you/sale</code>. About $0.10 a sale per month; we handle the hosting and updates. No commission.
+          Sign up, add items in a web form (no JSON, no git), share a short URL like <code>yrdsl.app/you/sale</code>. About $0.10 a sale per month; we handle the hosting and updates. No commission.
         </p>
         <a class="cta" href="https://app.yrdsl.app/signup">
           Sign up →
@@ -331,42 +341,22 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
       <div class="path">
         <h3>Chat with Claude.</h3>
         <p>
-          Connect over MCP from Claude Desktop and ask it what you'd ask a friend. Works on hosted (via API) and self-hosted (via your local repo):
+          Send a photo, type a short note, Claude handles the rest. Works on hosted (via API) and self-hosted (via your local repo).
         </p>
-        <div class="chat" aria-hidden="true">
-          <div class="bubble u">
-            <div class="photos">
-              <div class="ph bike"></div>
-              <div class="ph lamp"></div>
-            </div>
-            Here are photos of stuff I'm selling. Add them to my sale and suggest prices.
-          </div>
-          <div class="bubble c">
-            Added 2 items.
-            <div class="listing">
-              <div class="thumb bike"></div>
-              <div class="meta">
-                <div class="t">Vintage road bike, 56cm</div>
-                <div class="p">$320</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img class="path-shot" src="assets/claude-chat.png" alt="Claude Desktop: a photo of a Moccamaster coffee maker with the message 'Priced to move (80 euro) it's a moccamaster'." loading="lazy" />
         <p class="prompt-caption">
-          Published as <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> on npm. Works with either hosting option.
+          Published as <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> on npm.
         </p>
       </div>
       <div class="path">
-        <h3>Or edit directly.</h3>
+        <h3>Or fill in a form.</h3>
         <p>
-          On hosted, a web form in the editor. On self-hosted, two JSON files: <code>site.json</code> for the sale, <code>items.json</code> for the stuff. Same shapes either way, so a sale moves between modes without rewrites.
+          On hosted, add items in a web editor: pick a photo, type a title and price, hit save. No JSON, no git, no command line.
         </p>
-        <pre class="snippet"><code>{
-  "title": "Vintage road bike, 56cm",
-  "price": 320,
-  "image": "photos/bike.jpg",
-  "tags": ["bikes", "outdoor"]
-}</code></pre>
+        <img class="path-shot" src="assets/hosted-editor.png" alt="yrdsl.app editor showing a Moccamaster item with $80 price, the cover photo, and Reserve / Delete buttons." loading="lazy" />
+        <p class="prompt-caption">
+          Self-hosted? Edit <code>site.json</code> + <code>items.json</code> in any text editor. Same data shape, so a sale moves between modes without rewrites.
+        </p>
       </div>
     </div>
   </div>
