@@ -356,7 +356,9 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         <p>
           On hosted, add items in a web editor: pick a photo, type a title and price, hit save. No JSON, no git, no command line.
         </p>
-        <img class="path-shot" src="assets/hosted-editor-v2.png" alt="yrdsl.app editor showing a Moccamaster item with $80 price, the cover photo, and Reserve / Delete buttons." loading="lazy" />
+        <video class="path-shot" controls preload="metadata" playsinline poster="assets/form-poster.webp" aria-label="Screencast: using the yrdsl.app form editor to add an item, type a title and price, attach a photo, and hit save.">
+          <source src="assets/form.mp4" type="video/mp4">
+        </video>
         <p class="prompt-caption">
           Self-hosted? Edit <code>site.json</code> + <code>items.json</code> in any text editor. Same data shape, so a sale moves between modes without rewrites.
         </p>
@@ -366,7 +368,9 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         <p>
           Through the MCP, Claude can add items, write descriptions, set prices, and attach photos from a chat. Works on hosted (via API) and self-hosted (via your local repo).
         </p>
-        <img class="path-shot" src="assets/claude-chat-v3.png" alt="Claude Code session: the user says 'let's use the yrdsl mcp to create a listing for a moccamaster in the Moving Sale sale, here's the image, price it to sell at 80 Euro with brief description.' Claude calls the yrdsl MCP three times and replies 'Listed. Live at yrdsl.app/matt/moving-sale — €80, image attached.'" loading="lazy" />
+        <video class="path-shot" controls preload="metadata" playsinline poster="assets/claude-poster.webp" aria-label="Screencast: asking Claude in a chat to add a Moccamaster listing from a photo. Claude calls the yrdsl MCP and posts back the live URL.">
+          <source src="assets/claude.mp4" type="video/mp4">
+        </video>
         <p class="prompt-caption">
           Install as a <a href="https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl" target="_blank" rel="noopener">Claude Code plugin</a>, or wire the <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> stdio server into any MCP client.
         </p>
@@ -376,7 +380,9 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         <p>
           The hosted API is a REST endpoint with a bearer token. Wire it to any chat platform and an LLM to manage a sale by message.
         </p>
-        <img class="path-shot" src="assets/whatsapp-bot-v2.webp" alt="WhatsApp chat with a yard sale bot: the user sends a photo of a wooden table with 'Sell this table.' The bot asks 'Nice table! What would you like to list it for, and what should I call it in the listing?' The user replies 'Solid pine kitchen table. 100 Euro.' The bot confirms: 'Perfect! Listed your solid pine kitchen table for €100.' with a link to the sale." loading="lazy" />
+        <video class="path-shot" controls preload="metadata" playsinline poster="assets/openclaw-poster.webp" aria-label="Screencast: a user sends a photo of a table to a WhatsApp bot, chats about price and title, and the bot confirms the listing with a link.">
+          <source src="assets/openclaw.mp4" type="video/mp4">
+        </video>
         <p class="prompt-caption">
           Full walkthrough: <a href="https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot" target="_blank" rel="noopener">Build a WhatsApp bot</a> in the MCP docs.
         </p>
