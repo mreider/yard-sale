@@ -189,6 +189,13 @@ export interface Backend {
    */
   deleteImage(id: string, imageUrl: string, sale?: string): Promise<SaleItem>;
 
+  /**
+   * Promote an existing image to cover (position 0). Non-destructive:
+   * the full `images` array is preserved, just reordered. The target
+   * URL must already be on the item.
+   */
+  setCover(id: string, imageUrl: string, sale?: string): Promise<SaleItem>;
+
   // Mode-specific. Throw with a clear message if not applicable.
   publish(sale?: string): Promise<{ publishedAt: string; publicUrl?: string }>;
   unpublish(sale?: string): Promise<void>;

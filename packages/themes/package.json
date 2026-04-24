@@ -1,8 +1,8 @@
 {
   "name": "@yrdsl/themes",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "The four yard sale themes: conservative, artsy, hip, retro.",
+  "description": "The four digital yard sale themes (conservative, artsy, hip, retro) as plain CSS + a manifest.",
   "type": "module",
   "main": "./manifest.json",
   "exports": {
@@ -12,10 +12,21 @@
     "./hip": "./hip/styles.css",
     "./retro": "./retro/styles.css"
   },
+  "files": ["conservative", "artsy", "hip", "retro", "manifest.json", "README.md", "LICENSE"],
   "scripts": {
     "build": "echo 'themes are plain CSS' && exit 0",
     "typecheck": "echo 'no ts yet' && exit 0",
     "test": "echo 'no tests yet' && exit 0",
     "clean": "rm -rf dist"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KuvopLLC/yrdsl.git",
+    "directory": "packages/themes"
+  },
+  "homepage": "https://yrdsl.app",
+  "bugs": {
+    "url": "https://github.com/KuvopLLC/yrdsl/issues"
   }
 }

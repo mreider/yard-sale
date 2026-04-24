@@ -516,7 +516,7 @@ function ContactBlock({
   );
   return (
     <div className="form">
-      <h3>Want it? Reach out directly.</h3>
+      <h3>Contact me</h3>
       <div className="contact-row">
         {contact.email && (
           <a className="btn" href={`mailto:${contact.email}?subject=${subject}&body=${body}`}>
@@ -525,7 +525,7 @@ function ContactBlock({
         )}
         {contact.sms && (
           <a className="btn" href={`sms:${contact.sms}?body=${body}`}>
-            Text
+            SMS
           </a>
         )}
         {contact.whatsapp && (

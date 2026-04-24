@@ -212,6 +212,24 @@ export class HostedApiBackend implements Backend {
     return this.getItem(itemId, sale);
   }
 
+  async setCover(itemId: string, imageUrl: string, sale?: string): Promise<SaleItem> {
+    const id = await this.resolveSale(sale);
+    const current = await this.getItem(itemId, sale);
+    const existing = current.images ?? (current.image ? [current.image] : []);
+    if (!existing.includes(imageUrl)) {
+      throw new Error(
+        `Image "${imageUrl}" is not on item "${itemId}". Attach it first, or pass a URL that's already in item.images.`,
+      );
+    }
+    if (existing[0] === imageUrl) return current;
+    const reordered = [imageUrl, ...existing.filter((u) => u !== imageUrl)];
+    const { item } = await this.fetch<{ item: SaleItem }>(`/sales/${id}/items/${itemId}`, {
+      method: 'PATCH',
+      body: { images: reordered },
+    });
+    return item;
+  }
+
   // ─── Mode-specific ─────────────────────────────────────────────────────
   async publish(sale?: string): Promise<{ publishedAt: string; publicUrl?: string }> {
     const id = await this.resolveSale(sale);

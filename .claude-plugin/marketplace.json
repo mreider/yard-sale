@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "yrdsl",
+  "description": "Claude Code plugins published by the yrdsl project. Currently hosts the yrdsl plugin for running a digital yard sale from a chat with Claude.",
+  "owner": {
+    "name": "Matt Reider",
+    "email": "matt@mreider.com"
+  },
+  "plugins": [
+    {
+      "name": "yrdsl",
+      "description": "Publish a digital yard sale from a chat with Claude. Hosted on yrdsl.app or self-hosted on any static host (GitHub Pages, Vercel, Netlify, Cloudflare Pages).",
+      "category": "commerce",
+      "author": {
+        "name": "Matt Reider",
+        "email": "matt@mreider.com"
+      },
+      "source": "./plugins/yrdsl",
+      "homepage": "https://yrdsl.app",
+      "tags": ["mcp", "commerce", "marketplace", "claude-code"]
+    }
+  ]
+}

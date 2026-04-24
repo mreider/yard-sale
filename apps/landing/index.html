@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>yrdsl.app · a digital yard sale</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="description" content="A digital yard sale, built for Claude. Drop in your photos and Claude writes the listings. Self-host on GitHub Pages, or let us host it for pennies a month. Open source." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -194,6 +195,16 @@ h2 {
 }
 .snippet code { background: none; border: none; padding: 0; font-size: inherit; }
 
+.path-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  margin: 0 0 10px;
+}
+
 .chat {
   margin: 0 0 12px;
   padding: 14px;
@@ -264,10 +275,9 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 <nav class="nav">
   <div class="wrap nav-inner">
     <a class="brand" href="/">
-      <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-        <path d="M6 14 L16 4 L26 14 V26 a2 2 0 0 1 -2 2 H8 a2 2 0 0 1 -2 -2 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
-        <path d="M12 20.5 L18 26.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M6 6H20L27 13V26H6V6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"/>
+        <rect x="11" y="11" width="3" height="3" fill="currentColor"/>
       </svg>
       yrdsl.app
     </a>
@@ -305,16 +315,16 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
       <div class="path">
         <h3>Host it yourself.</h3>
         <p>
-          Fork the template and push to GitHub Pages. Free. Same data shape as the hosted version, so you can move between them.
+          GitHub Pages, Vercel, Netlify, or Cloudflare Pages. All free, all tied to the same JSON files so you can move between them.
         </p>
-        <a class="cta" href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">
-          github.com/KuvopLLC/yrdsl-self-hosted →
+        <a class="cta" href="/deploy/">
+          How to deploy →
         </a>
       </div>
       <div class="path">
         <h3>Let us host it.</h3>
         <p>
-          Sign up, add items, share the link. Free during the invite-only beta; about $0.10 a month after. No commission on any sale.
+          Sign up, add items in a web form (no JSON, no git), share a short URL like <code>yrdsl.app/you/sale</code>. About $0.10 a sale per month; we handle the hosting and updates. No commission.
         </p>
         <a class="cta" href="https://app.yrdsl.app/signup">
           Sign up →
@@ -326,47 +336,27 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 
 <section>
   <div class="wrap">
-    <h2>Two ways to build it.</h2>
+    <h2>Add and edit items.</h2>
     <div class="paths">
       <div class="path">
-        <h3>With Claude.</h3>
+        <h3>Chat with Claude.</h3>
         <p>
-          Connect over MCP from Claude Desktop and ask it what you'd ask a friend:
+          Through the MCP, Claude can add items, write descriptions, set prices, and attach photos from a chat. Works on hosted (via API) and self-hosted (via your local repo).
         </p>
-        <div class="chat" aria-hidden="true">
-          <div class="bubble u">
-            <div class="photos">
-              <div class="ph bike"></div>
-              <div class="ph lamp"></div>
-            </div>
-            Here are photos of stuff I'm selling. Add them to my sale and suggest prices.
-          </div>
-          <div class="bubble c">
-            Added 2 items.
-            <div class="listing">
-              <div class="thumb bike"></div>
-              <div class="meta">
-                <div class="t">Vintage road bike, 56cm</div>
-                <div class="p">$320</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img class="path-shot" src="assets/claude-chat-v3.png" alt="Claude Code session: the user says 'let's use the yrdsl mcp to create a listing for a moccamaster in the Moving Sale sale, here's the image, price it to sell at 80 Euro with brief description.' Claude calls the yrdsl MCP three times and replies 'Listed. Live at yrdsl.app/matt/moving-sale — €80, image attached.'" loading="lazy" />
         <p class="prompt-caption">
-          Published as <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> on npm. Works with either hosting option.
+          Install as a <a href="https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl" target="_blank" rel="noopener">Claude Code plugin</a>, or wire the <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> stdio server into any MCP client.
         </p>
       </div>
       <div class="path">
-        <h3>By hand.</h3>
+        <h3>Or fill in a form.</h3>
         <p>
-          Edit two JSON files: <code>site.json</code> for the sale, <code>items.json</code> for the stuff. Clean data shape, no lock-in.
+          On hosted, add items in a web editor: pick a photo, type a title and price, hit save. No JSON, no git, no command line.
         </p>
-        <pre class="snippet"><code>{
-  "title": "Vintage road bike, 56cm",
-  "price": 320,
-  "image": "photos/bike.jpg",
-  "tags": ["bikes", "outdoor"]
-}</code></pre>
+        <img class="path-shot" src="assets/hosted-editor-v2.png" alt="yrdsl.app editor showing a Moccamaster item with $80 price, the cover photo, and Reserve / Delete buttons." loading="lazy" />
+        <p class="prompt-caption">
+          Self-hosted? Edit <code>site.json</code> + <code>items.json</code> in any text editor. Same data shape, so a sale moves between modes without rewrites.
+        </p>
       </div>
     </div>
   </div>
@@ -381,13 +371,13 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 </section>
 
 <footer class="wrap">
-  <span>© 2026 Kuvop LLC · Apache 2.0 · <a href="https://oss.kuvop.com" target="_blank" rel="noopener">oss.kuvop.com</a></span>
+  <span>© 2026 <a href="https://oss.kuvop.com" target="_blank" rel="noopener">Kuvop LLC</a></span>
   <span class="links">
     <a href="https://github.com/KuvopLLC/yrdsl" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">Self-host template</a>
+    <a href="/deploy/">Deploy</a>
     <a href="/privacy">Privacy</a>
     <a href="/terms">Terms</a>
-    <a href="mailto:mreider@gmail.com">Contact</a>
+    <a href="mailto:matt@mreider.com">Contact</a>
   </span>
 </footer>
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * Canonical public JSON shape for a yard sale.
+ * Canonical public JSON shape for a digital yard sale.
  *
  * **The same two shapes (SaleSite + SaleItem) are used by both distribution
  * modes.** Self-hosted users author them by hand in `site.json` + `items.json`.

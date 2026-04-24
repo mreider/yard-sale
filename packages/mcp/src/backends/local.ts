@@ -278,6 +278,24 @@ export class LocalFileBackend implements Backend {
     return this.withItemUrl(next);
   }
 
+  async setCover(id: string, imageUrl: string, _sale?: string): Promise<SaleItem> {
+    const items = this.readJson<SaleItem[]>(this.itemsPath);
+    const idx = this.findIdx(items, id);
+    const item = items[idx] as SaleItem;
+    const existing = item.images ?? (item.image ? [item.image] : []);
+    if (!existing.includes(imageUrl)) {
+      throw new Error(
+        `Image "${imageUrl}" is not on item "${id}". Attach it first, or pass a URL that's already in item.images.`,
+      );
+    }
+    if (existing[0] === imageUrl) return this.withItemUrl(item);
+    const reordered = [imageUrl, ...existing.filter((u) => u !== imageUrl)];
+    const next: SaleItem = { ...item, images: reordered, image: undefined };
+    items[idx] = next;
+    this.writeJson(this.itemsPath, items);
+    return this.withItemUrl(next);
+  }
+
   /** Write bytes into `public/photos/` and return the repo-relative path. */
   private writePhoto(itemId: string, bytes: Uint8Array | Buffer, ext: string): string {
     const photosDir = join(this.repoDir, 'public', 'photos');
@@ -306,7 +324,7 @@ export class LocalFileBackend implements Backend {
     );
   }
   async commitAndPush(message?: string): Promise<{ pushed: boolean; note?: string }> {
-    const msg = message ?? 'update yard sale';
+    const msg = message ?? 'update digital yard sale';
     this.runGit(['add', '-A']);
     const status = this.runGit(['status', '--porcelain']).stdout;
     if (!status.trim()) return { pushed: false, note: 'Nothing to commit.' };

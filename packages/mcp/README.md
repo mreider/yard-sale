@@ -1,6 +1,6 @@
 # @yrdsl/mcp
 
-MCP server for [yrdsl.app](https://yrdsl.app). Lets Claude (or any MCP client) add, edit, and reserve items on a yard sale.
+MCP server for [yrdsl.app](https://yrdsl.app). Lets Claude (or any MCP client) add, edit, and reserve items on a digital yard sale.
 
 Two modes, one binary:
 
@@ -107,4 +107,4 @@ User: *"Add this to my sale, quick-sale price: https://example.com/products/coff
 
 ## License
 
-Apache-2.0. See the [yrdsl repository](https://github.com/KuvopLLC/yrdsl) for full source.
+MIT. See the [yrdsl repository](https://github.com/KuvopLLC/yrdsl) for full source.

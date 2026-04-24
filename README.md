@@ -1,117 +1,85 @@
 # yrdsl
 
-Open-source code behind [yrdsl.app](https://yrdsl.app), a way to run
-beautiful, low-friction yard sales. Apache 2.0, part of the
-[Kuvop OSS](https://oss.kuvop.com) family.
+[![CI](https://github.com/KuvopLLC/yrdsl/actions/workflows/ci.yml/badge.svg)](https://github.com/KuvopLLC/yrdsl/actions/workflows/ci.yml)
+[![Publish packages](https://github.com/KuvopLLC/yrdsl/actions/workflows/publish-packages.yml/badge.svg)](https://github.com/KuvopLLC/yrdsl/actions/workflows/publish-packages.yml)
+[![Publish MCP](https://github.com/KuvopLLC/yrdsl/actions/workflows/publish-mcp.yml/badge.svg)](https://github.com/KuvopLLC/yrdsl/actions/workflows/publish-mcp.yml)
 
-## Two ways to use this
+Yrdsl ("Digital Yard Sale") creates a hosted web page that lists items with photos, prices, short
+descriptions, and contact buttons for email, SMS, and WhatsApp. Buyers
+message you directly. No cart, no checkout, no payments.
 
-**Most people want the self-hosted template, not this monorepo.** Pick
-based on what you're trying to do:
+This repo is the open-source side of [yrdsl.app](https://yrdsl.app):
+shared schemas, the React viewer, themes, the MCP server, and the docs
+that explain how to publish a sale. Everything here is MIT-licensed.
 
-| If you want to... | Use |
-|---|---|
-| Run a single yard sale on free GitHub Pages, no backend, edit JSON yourself | [`KuvopLLC/yrdsl-self-hosted`](https://github.com/KuvopLLC/yrdsl-self-hosted) (template repo, "Use this template" → done) |
-| See what a self-hosted sale looks like | <https://mreider.github.io/yrdsl-example/> |
-| Sign up on the managed multi-sale version with email + Claude-MCP | <https://yrdsl.app> |
-| Read the codebase, contribute, fork the whole stack | This repo |
+There are two ways to publish a sale and this repo teaches both.
 
-This repo holds the SaaS source: the hosted API, the account SPA, the
-landing page, the shared renderer, the schemas. If you fork this, you're
-forking the full Kuvop-hosted stack.
+## Publish a sale via JSON files
 
-## Repo layout
+This is the self-hosted path. A sale is three things on disk:
 
-```
-apps/
-  landing/      # yrdsl.app marketing site (static, GitHub Pages)
-  web/          # app.yrdsl.app account SPA (React + Vite, CF Pages)
-packages/
-  core/         # zod schemas (auth, invite, sale, user, token)
-  viewer/       # React renderer for a yard sale; consumed by apps/web + the self-hosted template
-  themes/       # 4 themes: conservative, retro, hip, artsy
-services/
-  api-worker/   # Cloudflare Worker: REST API, auth, invites, billing
-  cleanup-worker/  # Scheduled cleanup jobs
-migrations/     # D1 schema
-ops/            # Operational notes (HOSTED-DEPLOY.md, etc.)
-PRD.md          # The full product spec
-```
+- `site.json` — sale title, contact methods, theme, currency.
+- `items.json` — an array of items with title, price, tags, photos.
+- `public/photos/*` — the actual photo files referenced from items.
 
-## Getting started (contributors)
+[`KuvopLLC/yrdsl-self-hosted`](https://github.com/KuvopLLC/yrdsl-self-hosted)
+is a GitHub template repo that wires these three into a working site
+built with Vite and deployed to GitHub Pages. Click **Use this
+template**, edit the JSON, push. A GitHub Action builds and publishes
+at `https://<your-username>.github.io/<your-repo>/`.
 
-```bash
-pnpm install
-pnpm -r typecheck
-pnpm lint
-```
+The JSON shapes are defined by zod schemas in
+[`packages/core`](./packages/core) and published as
+[`@yrdsl/core`](https://www.npmjs.com/package/@yrdsl/core). The
+self-hosted template validates against them before every deploy and
+accepts the same ZIPs that the hosted editor exports, so you can move
+a sale between modes losslessly.
 
-### Run the api-worker locally
+## Publish a sale via Claude (MCP)
 
-```bash
-cd services/api-worker
-cp .dev.vars.example .dev.vars     # populate session signing key
-pnpm exec wrangler d1 migrations apply yard-sale --local
-pnpm exec wrangler dev
-```
+The same operations work through a chat with
+[Claude](https://claude.ai/download) via the Model Context Protocol
+server published as
+[`@yrdsl/mcp`](https://www.npmjs.com/package/@yrdsl/mcp).
 
-### Run the web SPA
+Claude can add items, write descriptions, set prices, attach photos,
+mark things reserved, and publish the sale — all from a conversation.
+Examples:
 
-```bash
-cd apps/web
-pnpm dev
-```
+- *"Add a Moccamaster coffee maker, $80."*
+- *"Draft an item from this Amazon link and add it at 40% off retail."*
+- *"Mark the coffee maker sold for $70."*
 
-Vite proxies `/v1/*` to the local api-worker on `:8787`.
+The MCP points at either mode:
 
-### Tests
+- **Hosted:** an API token against `api.yrdsl.app`. The hosted app has
+  a *Connect Claude* tab that walks you through getting a key and
+  installing the MCP in Claude Desktop or Claude Code.
+- **Self-hosted:** a path to your self-hosted fork. The MCP reads and
+  writes the JSON files and the photos folder directly; setup lives
+  in the template repo's README.
 
-```bash
-cd services/api-worker
-pnpm exec vitest run
-```
+Source: [`packages/mcp`](./packages/mcp).
 
-The integration suite spins up `unstable_dev` against a real miniflare
-runtime with D1 schema applied via `test/global-setup.ts`. There's no
-browser-automation suite (Playwright / Cypress); UI smoke is manual.
-See PRD §12.
+## Packages in this repo
 
-## How the renderer is shared
+- [`@yrdsl/core`](./packages/core) — zod schemas + types for
+  `SaleSite`, `SaleItem`, `SaleContact`.
+- [`@yrdsl/viewer`](./packages/viewer) — React component that renders
+  a sale page. Used by both hosted and self-hosted.
+- [`@yrdsl/themes`](./packages/themes) — the four visual themes
+  (`conservative`, `artsy`, `hip`, `retro`) as plain CSS.
+- [`@yrdsl/mcp`](./packages/mcp) — the MCP server (stdio CLI + library).
 
-`packages/viewer` is a typed React component (`<SaleViewer site={...}
-items={...} />`) that renders any yard sale. It's consumed two ways:
+## Contact
 
-1. **Hosted:** imported directly by `apps/web` (and by the published
-   sale viewer Worker, planned in M2).
-2. **Self-hosted:** vendored as a copy into the
-   [`KuvopLLC/yrdsl-self-hosted`](https://github.com/KuvopLLC/yrdsl-self-hosted)
-   template's `src/vendor/`.
-
-Both modes consume identical `SaleSite` + `SaleItem` JSON shapes from
-`packages/core/src/schemas/sale.ts`. The hosted api-worker translates
-D1 rows into these shapes on serialize, so data exported from hosted
-drops cleanly into a self-hosted template and vice versa. See PRD §4.4
-for the full distribution-modes story.
-
-## Deploying your own copy
-
-If you fork this and want to run your own hosted version, the deploy
-specifics (Cloudflare account/zone IDs, D1 binding IDs, secrets, custom
-domains) live in `ops/HOSTED-DEPLOY.md`. That file is written from the
-perspective of the canonical Kuvop deploy; substitute your own values.
-
-If you just want a single sale, use the self-hosted template instead;
-this monorepo is overkill.
+[matt@mreider.com](mailto:matt@mreider.com). Bug reports, feature
+requests, and "I tried X and it was weird" are all welcome.
 
 ## Contributing
 
-PRs welcome. Please:
-
-- Run `pnpm lint` (biome) before pushing — CI is strict on format.
-- Run `pnpm -r typecheck` and the api-worker `vitest run`.
-- For schema changes touching `packages/core/src/schemas/sale.ts`, also
-  refresh the vendored copy in the self-hosted template repo.
+Dev setup, running locally, tests: [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-Apache 2.0. Operated by [Kuvop LLC](https://oss.kuvop.com).
+MIT. Operated by [Kuvop LLC](https://oss.kuvop.com).

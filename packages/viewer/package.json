@@ -1,8 +1,8 @@
 {
   "name": "@yrdsl/viewer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "React renderer for a yard sale site. Consumed by apps/web (hosted) and the self-hosted template.",
+  "description": "React component that renders a digital yard sale (photos, items, contact buttons). Consumed by yrdsl.app and the yrdsl-self-hosted template.",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -10,14 +10,25 @@
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css"
   },
+  "files": ["src", "README.md", "LICENSE"],
   "scripts": {
     "build": "echo 'viewer is consumed as source' && exit 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "clean": "rm -rf dist .turbo"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KuvopLLC/yrdsl.git",
+    "directory": "packages/viewer"
+  },
+  "homepage": "https://yrdsl.app",
+  "bugs": {
+    "url": "https://github.com/KuvopLLC/yrdsl/issues"
+  },
   "dependencies": {
-    "@yrdsl/core": "workspace:*",
+    "@yrdsl/core": "workspace:^",
     "react": "^18.3.1"
   },
   "devDependencies": {

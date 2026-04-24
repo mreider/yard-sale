@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Self-host a yrdsl sale · yrdsl.app</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="description" content="Deploy a yrdsl digital yard sale to GitHub Pages, Vercel, Netlify, or Cloudflare Pages. All free, all driven by the same JSON files." />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#fafaf9; --ink:#18181b; --ink-2:#3f3f46; --muted:#71717a; --line:#e7e5e4; --surface:#fff; --accent:#18181b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; font-size: 15px; line-height: 1.6; }
+  a { color: inherit; text-underline-offset: 3px; }
+  code, kbd { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace; font-size: 13px; background: #f4f4f5; padding: 1px 6px; border-radius: 4px; }
+  pre { background: #f4f4f5; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; line-height: 1.45; margin: 12px 0; }
+  pre code { background: transparent; padding: 0; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; border-bottom: 1px solid var(--line); }
+  .brand { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .brand svg { flex-shrink: 0; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 28px 80px; }
+  h1 { font-size: clamp(28px, 3.5vw, 38px); letter-spacing: -0.02em; margin: 0 0 10px; }
+  h2 { font-size: 20px; font-weight: 600; margin: 40px 0 10px; letter-spacing: -0.01em; }
+  h2 .num { color: var(--muted); font-weight: 500; margin-right: 4px; }
+  h3 { font-size: 15px; font-weight: 600; margin: 18px 0 6px; }
+  p, li { color: var(--ink-2); }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 28px; }
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .meta { font-size: 13px; color: var(--muted); margin-top: 10px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .meta span { white-space: nowrap; }
+  .meta strong { color: var(--ink-2); font-weight: 500; }
+  .card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 22px 26px; margin: 18px 0; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+  .btn { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 500; transition: transform .08s, opacity .12s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .back { display: inline-block; margin-top: 32px; font-size: 14px; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M6 6H20L27 13V26H6V6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"/>
+      <rect x="11" y="11" width="3" height="3" fill="currentColor"/>
+    </svg>
+    yrdsl.app
+  </a>
+  <a href="/" style="font-size:13px;color:var(--muted);text-decoration:none;">← back to home</a>
+</nav>
+
+<div class="wrap">
+  <h1>Self-host a digital yard sale</h1>
+  <p class="sub">
+    The template builds a static Vite project; anywhere that serves static files works.
+    Four concrete walkthroughs below — each uses the same <code>site.json</code> +
+    <code>items.json</code> + <code>public/photos/</code> under the hood, so you can
+    move between them later.
+  </p>
+  <p class="sub" style="margin-bottom: 12px;">
+    <strong style="color: var(--ink-2);">The free tiers on these hosts are real.</strong>
+    A digital yard sale is a few hundred KB of HTML and a few MB of photos; none of the free
+    plans here will come close to their limits. You don't need to pay any of them.
+  </p>
+  <p class="sub">
+    If you'd rather not run anything yourself, the
+    <a href="https://app.yrdsl.app/signup">hosted version</a> is about $0.10 per sale
+    per month, you get a short URL like <code>yrdsl.app/you/sale</code>, and we handle
+    the hosting, rebuilds, and updates.
+  </p>
+
+  <h2><span class="num">1.</span> GitHub Pages</h2>
+  <div class="card">
+    <p>Free static hosting on <code>github.io</code> (or a custom domain). A GitHub Action
+    builds and publishes on every push.</p>
+    <ol>
+      <li>Open <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">yrdsl-self-hosted</a>
+        and click <strong>Use this template</strong>.</li>
+      <li>In your new repo's <strong>Settings → Pages</strong>, set the source to <strong>GitHub Actions</strong>.</li>
+      <li>Edit <code>site.json</code> (title, contact, theme) and <code>items.json</code>; drop photos in
+        <code>public/photos/</code>.</li>
+      <li><code>git push</code>. Live in under a minute at
+        <code>https://&lt;you&gt;.github.io/&lt;repo&gt;/</code>.</li>
+    </ol>
+    <h3>Custom domain</h3>
+    <p>Add a <code>CNAME</code> file at the repo root with your domain, point a CNAME DNS
+    record at <code>&lt;you&gt;.github.io</code>, and add the domain in Pages settings.
+    Remove the <code>GH_PAGES_BASE</code> env var in <code>.github/workflows/deploy.yml</code>
+    so Vite builds with base <code>/</code>.</p>
+    <div class="meta">
+      <span><strong>Cost:</strong> free. Free tier handles any realistic sale.</span>
+      <span><strong>Custom domain:</strong> yes, free.</span>
+      <span><strong>Claude:</strong> via MCP on a local clone.</span>
+    </div>
+  </div>
+
+  <h2><span class="num">2.</span> Vercel</h2>
+  <div class="card">
+    <p>Import the template repo in the Vercel dashboard. No config file needed — Vercel
+    detects Vite and builds automatically.</p>
+    <ol>
+      <li>Use the <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">template</a>
+        to create your own repo.</li>
+      <li>In Vercel, <strong>Add New → Project</strong> and pick that repo.</li>
+      <li>Framework: <strong>Vite</strong>. Build command: <code>pnpm build</code>. Output
+        directory: <code>dist</code>. (Vercel fills these in.)</li>
+      <li>Deploy. You get
+        <code>&lt;project&gt;.vercel.app</code>; add a custom domain from the project's
+        <strong>Domains</strong> tab.</li>
+    </ol>
+    <p>On every <code>git push</code>, Vercel rebuilds and redeploys. To skip the
+    GitHub Pages base-path handling, just leave <code>GH_PAGES_BASE</code> unset —
+    Vite defaults to <code>/</code> which is what Vercel wants.</p>
+    <div class="meta">
+      <span><strong>Cost:</strong> free. Hobby tier handles any realistic sale.</span>
+      <span><strong>Custom domain:</strong> yes, free.</span>
+      <span><strong>Claude:</strong> via MCP on a local clone.</span>
+    </div>
+  </div>
+
+  <h2><span class="num">3.</span> Netlify</h2>
+  <div class="card">
+    <p>Same idea as Vercel; connect the repo, Netlify detects Vite.</p>
+    <ol>
+      <li>Use the <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">template</a>
+        to create your own repo.</li>
+      <li>In Netlify, <strong>Add new site → Import an existing project</strong>, pick the repo.</li>
+      <li>Build command: <code>pnpm build</code>. Publish directory: <code>dist</code>.
+        (Netlify pre-fills these for Vite.)</li>
+      <li>Deploy. You get <code>&lt;site&gt;.netlify.app</code>; add a custom domain
+        under <strong>Domain management</strong>.</li>
+    </ol>
+    <div class="meta">
+      <span><strong>Cost:</strong> free. Starter tier handles any realistic sale.</span>
+      <span><strong>Custom domain:</strong> yes, free.</span>
+      <span><strong>Claude:</strong> via MCP on a local clone.</span>
+    </div>
+  </div>
+
+  <h2><span class="num">4.</span> Cloudflare Pages</h2>
+  <div class="card">
+    <p>Cloudflare's equivalent of Vercel/Netlify. Also free, generous bandwidth.</p>
+    <ol>
+      <li>Use the <a href="https://github.com/KuvopLLC/yrdsl-self-hosted" target="_blank" rel="noopener">template</a>
+        to create your own repo.</li>
+      <li>In the Cloudflare dashboard, <strong>Workers &amp; Pages → Create → Pages →
+        Connect to Git</strong>.</li>
+      <li>Framework preset: <strong>Vite</strong>. Build command: <code>pnpm build</code>.
+        Output: <code>dist</code>.</li>
+      <li>Deploy. Custom domain via <strong>Pages project → Custom domains</strong>.</li>
+    </ol>
+    <div class="meta">
+      <span><strong>Cost:</strong> free. Bandwidth is unmetered.</span>
+      <span><strong>Custom domain:</strong> yes, free.</span>
+      <span><strong>Claude:</strong> via MCP on a local clone.</span>
+    </div>
+  </div>
+
+  <h2>Anywhere else</h2>
+  <p>The template outputs a static <code>dist/</code> directory. Anything that can serve
+  static files works: S3 + CloudFront, Fly.io static, Render, Surge, an
+  <code>nginx</code> VM, a USB stick on a lab server. Build locally with
+  <code>pnpm install &amp;&amp; pnpm build</code>, then serve <code>dist/</code>.</p>
+
+  <h2>Working with your sale</h2>
+  <p>Regardless of which of the four self-hosted options you picked, you now have a
+  git repository with <code>site.json</code>, <code>items.json</code>, and
+  <code>public/photos/</code>. Two ways to make changes:</p>
+
+  <h3>Manually, in your editor</h3>
+  <p>Clone, edit, preview, push. The host rebuilds automatically on every push (under
+  a minute for all four).</p>
+<pre><code>git clone https://github.com/&lt;you&gt;/&lt;your-repo&gt;.git
+cd &lt;your-repo&gt;
+pnpm install
+pnpm dev                # live preview at http://localhost:5173
+
+# edit site.json and items.json, drop photos in public/photos/
+
+pnpm validate           # catch schema errors before you push
+git add -A
+git commit -m "add toaster"
+git push</code></pre>
+
+  <h3>With Claude (MCP)</h3>
+  <p>The self-hosted template ships an MCP server that talks to your clone on disk.
+  Install it once; after that, talk to Claude.</p>
+<pre><code>cd &lt;your-repo&gt;
+pnpm install
+
+# Claude Code (easiest):
+claude mcp add yrdsl \
+  -e YRDSL_REPO=$(pwd) \
+  -- npx -y @yrdsl/mcp@latest
+
+# Claude Desktop: see the instructions in the template's README.</code></pre>
+  <p>Then ask Claude things like:</p>
+  <ul>
+    <li><em>"Add a Moccamaster coffee maker, $80, photo at ~/Downloads/moccamaster.jpg."</em></li>
+    <li><em>"Draft an item from this Amazon link and add it at 40% off retail."</em></li>
+    <li><em>"Mark the coffee maker reserved for $70."</em></li>
+    <li><em>"Switch the theme to retro, commit, and push."</em></li>
+  </ul>
+  <p>When you ask Claude to commit or push, the MCP runs <code>git commit</code> and
+  <code>git push</code> in your clone. The host sees the push and rebuilds.</p>
+
+  <h2>Moving a sale between hosts</h2>
+  <p>Every mode reads the same three things: <code>site.json</code>, <code>items.json</code>,
+  and <code>public/photos/</code>. To migrate:</p>
+  <ul>
+    <li><strong>Hosted → self-hosted:</strong> in the editor's <em>More</em> menu, click
+      <strong>Export as ZIP</strong>, drop the files into your fork, push.</li>
+    <li><strong>Self-hosted → hosted:</strong> ZIP your <code>site.json</code>,
+      <code>items.json</code>, and <code>public/photos/</code> folder, upload it on
+      <code>app.yrdsl.app/profile</code> under <em>Import a sale</em>. There's also a
+      <code>pnpm import</code> script in the template that does the reverse direction.</li>
+  </ul>
+
+  <a class="back" href="/">← Back to yrdsl.app</a>
+</div>
+</body>
+</html>

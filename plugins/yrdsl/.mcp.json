@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "yrdsl": {
+      "command": "npx",
+      "args": ["-y", "@yrdsl/mcp@latest"]
+    }
+  }
+}

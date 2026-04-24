@@ -1,0 +1,13 @@
+{
+  "name": "yrdsl",
+  "version": "0.1.0",
+  "description": "Publish a digital yard sale from a chat with Claude. Hosted on yrdsl.app or self-hosted on any static host (GitHub Pages, Vercel, Netlify, Cloudflare Pages).",
+  "author": {
+    "name": "Matt Reider",
+    "email": "matt@mreider.com"
+  },
+  "homepage": "https://yrdsl.app",
+  "repository": "https://github.com/KuvopLLC/yrdsl",
+  "license": "MIT",
+  "keywords": ["digital-yard-sale", "marketplace", "mcp", "commerce"]
+}

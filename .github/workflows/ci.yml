@@ -1,61 +1,38 @@
 name: CI
 
+# Keep @yrdsl/{core,viewer,themes,mcp} honest: lint, typecheck, and run
+# tests on every push to main and every PR. Published versions go out
+# via publish-packages.yml and publish-mcp.yml — this workflow just
+# guards against broken source landing on main.
+
 on:
-  pull_request:
   push:
     branches: [main]
+  pull_request:
+  workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+permissions:
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
-  build-test:
-    name: Lint, typecheck, test
+  check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck (all workspaces)
-        run: pnpm turbo run typecheck
-
-      - name: Unit tests
-        run: pnpm turbo run test
-
-      - name: Dry-run build api-worker
-        run: pnpm --filter @yrdsl/api-worker build
-
-      - name: Build SPA + check bundle size
-        run: |
-          pnpm --filter @yrdsl/web build
-          node scripts/check-bundle-size.mjs
-
-      - name: Validate locale JSON (when present)
-        run: |
-          if [ -d packages/i18n/locales ]; then
-            for f in packages/i18n/locales/*.json; do
-              [ -f "$f" ] || continue
-              node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" \
-                || (echo "invalid JSON in $f" && exit 1)
-            done
-            echo "all locale files parsed."
-          else
-            echo "no locales yet; skipping."
-          fi
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm -r typecheck
+      - run: pnpm -r test

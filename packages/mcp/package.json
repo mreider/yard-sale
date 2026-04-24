@@ -1,7 +1,7 @@
 {
   "name": "@yrdsl/mcp",
   "version": "0.4.6",
-  "description": "MCP server for yrdsl.app. Talks to either the hosted API (api.yrdsl.app) or a local self-hosted repo. Lets Claude add, edit, and reserve items on a yard sale.",
+  "description": "MCP server for yrdsl.app. Talks to either the hosted API (api.yrdsl.app) or a local self-hosted repo. Lets Claude add, edit, and reserve items on a digital yard sale.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -41,7 +41,7 @@
     "name": "Matt Reider",
     "email": "mreider@gmail.com"
   },
-  "license": "Apache-2.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KuvopLLC/yrdsl.git",

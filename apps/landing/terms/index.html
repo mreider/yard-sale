@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Terms · yrdsl.app</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -13,7 +14,8 @@
   a { color: inherit; text-underline-offset: 3px; }
   .wrap { max-width: 720px; margin: 0 auto; padding: 48px 28px 80px; }
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; border-bottom: 1px solid var(--line); }
-  .brand { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; text-decoration: none; }
+  .brand { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .brand svg { flex-shrink: 0; }
   h1 { font-size: clamp(28px, 3.5vw, 38px); letter-spacing: -0.02em; margin: 0 0 10px; }
   h2 { font-size: 17px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
   p, li { color: var(--ink-2); }
@@ -26,7 +28,13 @@
 </head>
 <body>
 <nav class="nav">
-  <a class="brand" href="/">yrdsl.app</a>
+  <a class="brand" href="/">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M6 6H20L27 13V26H6V6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"/>
+      <rect x="11" y="11" width="3" height="3" fill="currentColor"/>
+    </svg>
+    yrdsl.app
+  </a>
   <a href="/" style="font-size:13px;color:var(--muted);text-decoration:none;">← back to home</a>
 </nav>
 
@@ -39,7 +47,7 @@
 
   <h2>The short version</h2>
   <ul>
-    <li>We give you a place to list your yard sale items and share one link with your neighbors. You handle the money, the handoff, the conversation.</li>
+    <li>We give you a place to list your digital yard sale items and share one link with your neighbors. You handle the money, the handoff, the conversation.</li>
     <li>You own your content. We host it on your behalf and charge the metered rates on the pricing page.</li>
     <li>Don't list anything illegal, obviously-scam, infringing, hateful, or CSAM. We will remove listings that violate this and may terminate repeat offenders.</li>
     <li>This is a beta. Bugs happen. We are not liable for lost sales, missed buyers, or downtime.</li>
@@ -54,7 +62,7 @@
   <h2>Changes</h2>
   <p>If these terms change meaningfully, we'll email you at least seven days before the change takes effect. Continuing to use the service after that is your agreement to the new terms.</p>
 
-  <p style="color:var(--muted);font-size:13px;margin-top:32px;">Contact: <a href="mailto:mreider@gmail.com">mreider@gmail.com</a></p>
+  <p style="color:var(--muted);font-size:13px;margin-top:32px;">Contact: <a href="mailto:matt@mreider.com">matt@mreider.com</a></p>
 
   <a class="back" href="/">← back to home</a>
 </div>

@@ -404,6 +404,22 @@ export const tools: Record<string, ToolDef> = {
       backend.deleteImage(String(args.id), String(args.url), str(args.sale)),
   },
 
+  set_cover: {
+    description:
+      "Promote one of an item's existing images to the cover position (first in `images`). " +
+      'Non-destructive: the full `images` array is preserved, just reordered. The URL must ' +
+      'already be attached to the item — look it up via `get_item`. Do NOT use `update_item` ' +
+      'with `images: [...]` to change covers; that replaces the whole array and deletes the ' +
+      'others. This tool is the correct primitive.',
+    schema: z.object({
+      ...SaleRefField,
+      id: z.string().describe('Item id or slug.'),
+      url: z.string().describe('The image URL to promote to cover (must be in item.images[]).'),
+    }),
+    handler: async (backend, args) =>
+      backend.setCover(String(args.id), String(args.url), str(args.sale)),
+  },
+
   publish: {
     description:
       '[hosted only] Make the sale visible at its public URL. ' +

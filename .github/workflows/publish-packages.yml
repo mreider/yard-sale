@@ -1,0 +1,117 @@
+name: Publish @yrdsl/* packages
+
+# Manual-trigger only for now. The workflow reads the version from each
+# package's package.json and publishes if that version isn't already on
+# npm. Flip to `push` once the packages-only repo split lands and we're
+# confident version bumps are intentional.
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'Comma-separated list: core,viewer,themes (all = everything)'
+        required: false
+        default: 'all'
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: publish-packages
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      # Publish each package in isolation so one package's failure doesn't
+      # cancel the others. They don't depend on each other's published
+      # versions during build — each is self-contained source.
+      fail-fast: false
+      matrix:
+        package: [core, viewer, themes]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Filter packages by dispatch input
+        id: gate
+        run: |
+          pkgs="${{ github.event.inputs.packages }}"
+          if [ -z "$pkgs" ] || [ "$pkgs" = "all" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif echo ",${pkgs}," | grep -q ",${{ matrix.package }},"; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Package ${{ matrix.package }} not in requested list: $pkgs"
+          fi
+
+      - name: Read package version
+        if: steps.gate.outputs.run == 'true'
+        id: version
+        run: |
+          ver=$(node -e "console.log(require('./packages/${{ matrix.package }}/package.json').version)")
+          name=$(node -e "console.log(require('./packages/${{ matrix.package }}/package.json').name)")
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          if npm view "${name}@${ver}" version >/dev/null 2>&1; then
+            echo "${name}@${ver} is already on npm — nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "${name}@${ver} not on npm — will publish."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install workspace deps
+        if: steps.gate.outputs.run == 'true' && steps.version.outputs.skip == 'false'
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        if: steps.gate.outputs.run == 'true' && steps.version.outputs.skip == 'false'
+        run: pnpm --filter @yrdsl/${{ matrix.package }} typecheck
+
+      - name: Publish to npm
+        if: steps.gate.outputs.run == 'true' && steps.version.outputs.skip == 'false'
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is missing."
+            echo "::error::Run: gh secret set NPM_TOKEN -R KuvopLLC/yrdsl"
+            exit 1
+          fi
+          cd packages/${{ matrix.package }}
+          # Packages are `"private": true` in source so `pnpm publish -r`
+          # can't leak them by accident. Strip that flag for this publish
+          # step only (working copy, not committed back). pnpm publish
+          # also rewrites `workspace:^` / `workspace:*` deps to real
+          # semver ranges during packing, which is why we use it over
+          # npm publish for workspace-consuming packages like viewer.
+          node -e "
+            const fs = require('fs');
+            const p = JSON.parse(fs.readFileSync('package.json','utf8'));
+            delete p.private;
+            delete p.scripts;
+            fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
+          "
+          pnpm publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Tag release
+        if: steps.gate.outputs.run == 'true' && steps.version.outputs.skip == 'false'
+        run: |
+          tag="${{ matrix.package }}-v${{ steps.version.outputs.version }}"
+          git tag "$tag"
+          git push origin "$tag"
