@@ -76,10 +76,11 @@ overwrite_flair: false
 
 ---
 
-# Filter link-only posts (no body) into the modqueue. yrdsl posts
-# should always have at least a short description.
+# Filter low-effort posts to the modqueue: anything with less than 20
+# characters of body text. Catches link-only posts (link posts have
+# empty body) plus ultra-short self posts ("hi", "test", etc.). A
+# human approves anything legit.
 type: submission
-is_self: false
-body (regex): '^\s*$'
+body (length, "<"): 20
 action: filter
-action_reason: "link-only post, no body"
+action_reason: "very short / link-only post — modqueue review"
