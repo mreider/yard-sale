@@ -6,7 +6,15 @@
     <atom:link href="https://yrdsl.app/blog/feed.xml" rel="self" type="application/rss+xml" />
     <description>Updates on yrdsl.app — build progress, sample sales, and how-tos.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Apr 2026 15:51:42 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2026 16:59:52 GMT</lastBuildDate>
+    <item>
+      <title>yrdsl.app, WhatsApp, and a little server in my son's room</title>
+      <link>https://yrdsl.app/blog/texting-photos-to-yrdsl/</link>
+      <guid isPermaLink="true">https://yrdsl.app/blog/texting-photos-to-yrdsl/</guid>
+      <pubDate>Sun, 26 Apr 2026 12:00:00 GMT</pubDate>
+      <description>How a photo on my phone ends up on the yard sale, without me opening a browser. And how to wire up the same setup yourself.</description>
+      <category>tutorial</category><category>setup</category>
+    </item>
     <item>
       <title>yrdsl.app and the onslaught of AI side-projects</title>
       <link>https://yrdsl.app/blog/welcome/</link>

@@ -302,7 +302,8 @@ code {
 .post-body a:hover {
   text-decoration-color: var(--ink);
 }
-.post-body img {
+.post-body img,
+.post-body video {
   max-width: 100%;
   height: auto;
   display: block;

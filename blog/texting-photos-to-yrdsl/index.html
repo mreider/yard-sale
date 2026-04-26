@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yrdsl.app, WhatsApp, and a little server in my son's room · yrdsl.app blog</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="description" content="How a photo on my phone ends up on the yard sale, without me opening a browser. And how to wire up the same setup yourself." />
+<link rel="alternate" type="application/rss+xml" title="yrdsl.app blog" href="/blog/feed.xml" />
+<link rel="canonical" href="https://yrdsl.app/blog/texting-photos-to-yrdsl/" />
+<meta property="og:title" content="yrdsl.app, WhatsApp, and a little server in my son's room" />
+<meta property="og:description" content="How a photo on my phone ends up on the yard sale, without me opening a browser. And how to wire up the same setup yourself." />
+<meta property="og:url" content="https://yrdsl.app/blog/texting-photos-to-yrdsl/" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="yrdsl.app" />
+<meta property="og:image" content="https://yrdsl.app/assets/hero-gallery.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="yrdsl.app, WhatsApp, and a little server in my son's room" />
+<meta name="twitter:description" content="How a photo on my phone ends up on the yard sale, without me opening a browser. And how to wire up the same setup yourself." />
+<meta name="twitter:image" content="https://yrdsl.app/assets/hero-gallery.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/blog.css" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/github.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/highlight.min.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.hljs) window.hljs.highlightAll();
+  });
+</script>
+</head>
+<body>
+<header class="blog-nav">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M6 6H20L27 13V26H6V6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter" />
+        <rect x="11" y="11" width="3" height="3" fill="currentColor" />
+      </svg>
+      yrdsl.app
+    </a>
+    <nav>
+      <a href="/blog/">Blog</a>
+      <a href="/deploy/">Deploy</a>
+      <a href="https://app.yrdsl.app/signup">Sign up</a>
+    </nav>
+  </div>
+</header>
+<main class="blog-main">
+  <div class="wrap">
+    
+    <article>
+      <header class="post-header">
+        <h1 class="post-title">yrdsl.app, WhatsApp, and a little server in my son's room</h1>
+        <div class="post-meta">
+          <time datetime="2026-04-26">April 26, 2026</time>
+          <span class="post-tags"><a href="/blog/tags/tutorial/">tutorial</a><a href="/blog/tags/setup/">setup</a></span>
+        </div>
+      </header>
+      <div class="post-body"><p>The thing I actually wanted, well before I built any of this, was simple. Walk around the house with my phone. Take a picture of the couch. Have it show up on my yard sale, with a price and a description, without opening a browser, copy-pasting anything, or logging into anything.</p>
+<p>That was the whole goal. A workflow with so little friction that I&#39;d actually use it, every time I noticed another thing I wanted gone.</p>
+<p>Here&#39;s what it ended up looking like:</p>
+<video controls preload="metadata" playsinline poster="/assets/openclaw-poster.webp">
+  <source src="/assets/openclaw.mp4" type="video/mp4">
+</video><p>I send a photo to a WhatsApp bot. It asks what to call it and how much I want for it. I type a few words back, and the listing shows up on the sale.</p>
+<p>There are three pieces making this work, and one of them is a little Ubuntu box plugged in next to my son&#39;s gaming PC.</p>
+<h2>The architecture</h2>
+<pre><code>WhatsApp on my phone
+    ↓
+openclaw bot (Node.js, in podman, on a small Ubuntu server)
+    ↓
+yrdsl.app REST API (with my account token)
+</code></pre>
+<ul>
+<li><strong>WhatsApp</strong> carries my messages to the bot, and the bot&#39;s replies back to me.</li>
+<li><strong>openclaw</strong> is a small Node program that uses <a href="https://github.com/WhiskeySockets/Baileys">Baileys</a> to read WhatsApp messages and the Anthropic SDK to ask Claude what to do with them. Claude has a set of &quot;tools&quot; wired up that map 1:1 to yrdsl operations (add_item, attach_image, mark_reserved, and so on).</li>
+<li><strong>yrdsl.app</strong> is the hosted yard sale. It exposes a plain REST API behind a bearer token, which is what openclaw actually calls.</li>
+</ul>
+<h2>What you need</h2>
+<ul>
+<li>A <strong>yrdsl.app account</strong> with at least one sale. Sign up at <a href="https://app.yrdsl.app/signup">app.yrdsl.app/signup</a>; it&#39;s free during the pre-release.</li>
+<li>An <strong>API token</strong> from the Connect Claude page in the SPA. Looks like <code>yrs_live_...</code>.</li>
+<li>An <strong>LLM that can do tool use</strong>. The example uses Claude via the Anthropic API (<a href="https://console.anthropic.com">console.anthropic.com</a>). A local model in <a href="https://ollama.com">Ollama</a> is a fine substitute if you&#39;d rather not send anything to the cloud.</li>
+<li>A <strong>server</strong>. Mine&#39;s a refurbished mini-PC running Ubuntu 24.04 in my son&#39;s bedroom. A Raspberry Pi 4, a tiny VPS, a spare laptop. Anything that runs Linux and stays online will do.</li>
+<li><strong>podman</strong> (or docker; same commands, just swap the binary).</li>
+</ul>
+<h2>Setting it up</h2>
+<p>The full bot source lives in <a href="https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot">yrdsl/packages/mcp/README.md</a>. Below is what you actually run, end to end, on the box.</p>
+<h3>1. Drop the source files in one directory</h3>
+<p>On the server, in your home folder:</p>
+<pre><code class="language-sh">mkdir -p ~/.openclaw &amp;&amp; cd ~/.openclaw
+</code></pre>
+<p>Copy the three files from the README into here: <code>Containerfile</code>, <code>bot.js</code>, and <code>package.json</code>.</p>
+<h3>2. Set up the env file</h3>
+<p>Create <code>~/.openclaw/.env</code> with three required variables:</p>
+<pre><code class="language-sh">ANTHROPIC_API_KEY=sk-ant-...
+YRDSL_API_TOKEN=yrs_live_...
+ALLOWED_JIDS=__placeholder__@lid
+</code></pre>
+<p><code>ALLOWED_JIDS</code> is a hard allowlist of WhatsApp identifiers. The bot won&#39;t reply to anyone whose ID isn&#39;t on this list, and it won&#39;t even start with the list empty. We&#39;ll fill in the real value in a minute. For now, leave the placeholder.</p>
+<h3>3. Build the image</h3>
+<pre><code class="language-sh">podman build -t localhost/openclaw:latest -f Containerfile .
+</code></pre>
+<p>First build pulls Node 22 and installs Baileys plus the Anthropic SDK. Takes a minute.</p>
+<h3>4. Start it once and grab the QR code</h3>
+<pre><code class="language-sh">podman run -d --name openclaw \
+  --env-file ~/.openclaw/.env \
+  -v ~/.openclaw/whatsapp-auth:/app/whatsapp-auth:Z \
+  -v ~/.openclaw/images:/app/images:Z \
+  --replace localhost/openclaw:latest
+
+podman logs -f openclaw
+</code></pre>
+<p>The logs will print a QR code in ASCII. Open WhatsApp on your phone, go to Settings, then Linked Devices, then Link a Device, and scan it. You should see <code>[whatsapp] Connected</code> in the logs.</p>
+<h3>5. Find your WhatsApp ID</h3>
+<p>Send any message to the bot from your phone. The logs will print:</p>
+<pre><code>[skip] not in allowlist: 209126403625097@lid
+</code></pre>
+<p>That long number ending in <code>@lid</code> is your ID. Modern WhatsApp uses these opaque &quot;Linked IDs&quot; instead of phone numbers, so even though I know my own phone number perfectly well, the bot sees a 15-digit string ending in <code>@lid</code>.</p>
+<p>Copy your ID, edit <code>.env</code>, replace the placeholder:</p>
+<pre><code class="language-sh">ALLOWED_JIDS=209126403625097@lid
+</code></pre>
+<p>Then restart:</p>
+<pre><code class="language-sh">podman restart openclaw
+</code></pre>
+<p>Send another message. This time the bot replies.</p>
+<h3>6. Send the couch</h3>
+<p>Take a photo of whatever you want to sell. Send it to the openclaw chat. The bot asks you for a title and price if you don&#39;t include them in the caption. Then it adds the item to your sale and sends back a public link. Open it in a browser and your couch is for sale.</p>
+<h2>Why I keep using it</h2>
+<p>The friction is gone, which is what I wanted. Walking around the house with my phone, the photos go up before I put the phone back in my pocket, which is enough to mean I actually do it. That&#39;s the test for any side-project I build: whether I keep using it. With this one, I do.</p>
+</div>
+      <aside class="post-cta">
+        <h3>Sell your stuff on yrdsl.</h3>
+        <p>A digital yard sale, free during pre-release. Self-host or hosted at yrdsl.app.</p>
+        <a class="cta-btn" href="https://app.yrdsl.app/signup">Sign up &rarr;</a>
+      </aside>
+    </article>
+    
+  </div>
+</main>
+<footer class="blog-footer wrap">
+  <span>© 2026 <a href="https://oss.kuvop.com" target="_blank" rel="noopener">Kuvop LLC</a></span>
+  <span class="links">
+    <a href="https://www.reddit.com/r/yrdsl/" target="_blank" rel="noopener">Community</a>
+    <a href="https://github.com/KuvopLLC/yrdsl" target="_blank" rel="noopener">GitHub</a>
+    <a href="/blog/">Blog</a>
+    <a href="/blog/feed.xml">RSS</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="mailto:matt@mreider.com">Contact</a>
+  </span>
+</footer>
+</body>
+</html>
