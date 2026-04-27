@@ -12,6 +12,7 @@
   "sort.price_desc": "Price: high to low",
   "empty.no_results": "Nothing matches. Try clearing filters or toggling \"Hide reserved\" off.",
   "footer.updated": "Updated",
+  "footer.just_now": "just now",
   "item.reserved": "Reserved",
   "item.photos_one": "1 photo",
   "item.photos_other": "{count} photos",

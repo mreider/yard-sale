@@ -64,6 +64,8 @@ export class HostedApiBackend implements Backend {
     if (input.language !== undefined) body.language = input.language;
     if (input.currency !== undefined) body.currency = input.currency;
     if (input.contact !== undefined) body.contact = input.contact;
+    if (input.visibility !== undefined) body.visibility = input.visibility;
+    if (input.region !== undefined) body.region = input.region;
     const { sale } = await this.fetch<{
       sale: SaleSite & { id: string; slug: string; editorUrl?: string; publicUrl?: string };
     }>(`/sales`, { method: 'POST', body });
@@ -108,6 +110,8 @@ export class HostedApiBackend implements Backend {
     if (patch.currency !== undefined) body.currency = patch.currency;
     if (patch.language !== undefined) body.language = patch.language;
     if (patch.contact !== undefined) body.contact = patch.contact;
+    if (patch.visibility !== undefined) body.visibility = patch.visibility;
+    if (patch.region !== undefined) body.region = patch.region;
     const { sale: s } = await this.fetch<{ sale: SaleSite }>(`/sales/${id}`, {
       method: 'PATCH',
       body,

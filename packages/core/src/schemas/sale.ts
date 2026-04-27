@@ -95,6 +95,13 @@ export const CreateSaleBody = z.object({
       notes: z.string().max(500).optional(),
     })
     .optional(),
+  visibility: z.enum(['public', 'private']).optional(),
+  region: z
+    .object({
+      country: z.string().length(2),
+      city: z.string().optional(),
+    })
+    .optional(),
 });
 export type CreateSaleBody = z.infer<typeof CreateSaleBody>;
 
@@ -173,6 +180,18 @@ export const SaleSite = z
     publicUrl: z.string().optional(),
     /** Host-only: absolute URL where the owner can edit this sale. */
     editorUrl: z.string().optional(),
+    /** Whether the sale is publicly discoverable. `private` uses a token URL that hides the username. */
+    visibility: z.enum(['public', 'private']).default('public'),
+    /** Host-only: secret token for private sales. URL is /s/{token}. Generated server-side. */
+    privateToken: z.string().optional(),
+    /** Optional region for discovery search. */
+    region: z
+      .object({
+        /** ISO 3166-1 alpha-2 country code. */
+        country: z.string().length(2),
+        city: z.string().optional(),
+      })
+      .optional(),
   })
   .passthrough(); // sibling locale keys like `siteName_de` pass through.
 export type SaleSite = z.infer<typeof SaleSite>;

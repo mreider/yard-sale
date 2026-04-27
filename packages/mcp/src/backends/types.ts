@@ -66,6 +66,10 @@ export interface SaleSite {
   publicUrl?: string;
   /** Absolute URL of the edit page (requires auth to actually load). */
   editorUrl?: string;
+  visibility?: 'public' | 'private';
+  /** Host-only: secret token for private sales (/s/{token}). */
+  privateToken?: string;
+  region?: { country: string; city?: string };
   // Allow arbitrary locale sibling keys.
   [k: string]: unknown;
 }
@@ -102,6 +106,8 @@ export interface UpdateSiteInput {
   currency?: string;
   language?: string;
   contact?: SaleContact;
+  visibility?: 'public' | 'private';
+  region?: { country: string; city?: string };
 }
 
 export interface CreateSaleInput {
@@ -112,6 +118,8 @@ export interface CreateSaleInput {
   /** ISO 4217 currency code. Defaults to USD server-side if omitted. */
   currency?: string;
   contact?: SaleContact;
+  visibility?: 'public' | 'private';
+  region?: { country: string; city?: string };
 }
 
 export interface SaleSummary {

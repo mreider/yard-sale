@@ -109,6 +109,9 @@ code { font-family: "JetBrains Mono", monospace; font-size: 0.92em; background: 
 html[data-dark="true"] .mode .sun { display: inline-block; }
 html[data-dark="true"] .mode .moon { display: none; }
 
+#ff-badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--muted); background: var(--surface-2); cursor: pointer; }
+#ff-badge:hover { color: var(--ink); border-color: var(--ink); }
+
 .lang-pick {
   font-size: 13px;
   color: var(--muted);
@@ -350,6 +353,26 @@ section:has(.path-centered) h2 {
 }
 .latest-posts-more a:hover { border-color: var(--ink); }
 
+/* Discovery search section */
+.discovery-hidden { display: none !important; }
+.search-mode-row { display: flex; gap: 24px; margin: 0 0 20px; flex-wrap: wrap; }
+.search-mode-label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; color: var(--ink-2); }
+.search-mode-label input[type="radio"] { accent-color: var(--ink); }
+.search-fields { display: flex; flex-direction: column; gap: 8px; max-width: 380px; margin: 0 0 16px; }
+.search-fields label { font-size: 13px; font-weight: 500; color: var(--muted); }
+.search-fields input, .search-fields select { font: inherit; font-size: 14px; padding: 8px 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--surface); color: var(--ink); }
+.search-fields input:focus, .search-fields select:focus { outline: none; border-color: var(--ink); }
+.search-submit { padding: 8px 20px; background: var(--ink); color: var(--bg); border: none; border-radius: 8px; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .12s; }
+.search-submit:hover { opacity: 0.85; }
+.search-status { font-size: 14px; color: var(--muted); margin: 12px 0 0; min-height: 1.2em; }
+.search-results { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+.search-result-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.search-result-card .src-meta { display: flex; flex-direction: column; gap: 3px; }
+.search-result-card .src-name { font-weight: 600; font-size: 15px; }
+.search-result-card .src-detail { font-size: 13px; color: var(--muted); }
+.search-result-card a.src-link { font-size: 13px; font-weight: 500; white-space: nowrap; border-bottom: 1px solid var(--line-2); padding-bottom: 1px; transition: border-color .12s; }
+.search-result-card a.src-link:hover { border-color: var(--ink); }
+
 /* Footer */
 footer {
   padding: 40px 0 60px;
@@ -377,6 +400,7 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
       <a href="/blog/">Blog</a>
       <a class="nav-signin" href="https://app.yrdsl.app/login" data-i18n="nav.sign_in">Sign in</a>
       <a class="nav-cta" href="https://app.yrdsl.app/signup" data-i18n="nav.sign_up">Sign up</a>
+      <button id="ff-badge" style="display:none">FF on</button>
       <select id="lang-pick" aria-label="Language" class="lang-pick">
         <option value="en">English</option>
         <option value="de">Deutsch</option>
@@ -403,7 +427,7 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
     <p class="hero-link">
       <span data-i18n="hero.see_a">See a</span> <a href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener" data-i18n="hero.live_example">live example</a>.
     </p>
-    <a class="shot" href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener" aria-label="Open the live example">
+    <a class="shot" href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener" aria-label="Open the live example" data-i18n-aria="hero.shot_aria">
       <img src="assets/hero-gallery.png" alt="Screenshot of a yrdsl.app sale page showing 6 items in a grid" loading="lazy" />
     </a>
   </div>
@@ -447,7 +471,7 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         <video class="path-shot" controls preload="metadata" playsinline poster="assets/form-poster.webp" aria-label="Screencast: using the yrdsl.app form editor to add an item, type a title and price, attach a photo, and hit save.">
           <source src="assets/form.mp4" type="video/mp4">
         </video>
-        <p class="prompt-caption">
+        <p class="prompt-caption" data-i18n-html="items.form_caption">
           Self-hosted? Edit <code>site.json</code> + <code>items.json</code> in any text editor. Same data shape, so a sale moves between modes without rewrites.
         </p>
       </div>
@@ -459,7 +483,7 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         <video class="path-shot" controls preload="metadata" playsinline poster="assets/claude-poster.webp" aria-label="Screencast: asking Claude in a chat to add a Moccamaster listing from a photo. Claude calls the yrdsl MCP and posts back the live URL.">
           <source src="assets/claude.mp4" type="video/mp4">
         </video>
-        <p class="prompt-caption">
+        <p class="prompt-caption" data-i18n-html="items.claude_caption">
           Install as a <a href="https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl" target="_blank" rel="noopener">Claude Code plugin</a>, or wire the <a href="https://www.npmjs.com/package/@yrdsl/mcp" target="_blank" rel="noopener"><code>@yrdsl/mcp</code></a> stdio server into any MCP client.
         </p>
       </div>
@@ -471,11 +495,40 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         <video class="path-shot" controls preload="metadata" playsinline poster="assets/openclaw-poster.webp" aria-label="Screencast: a user sends a photo of a table to a WhatsApp bot, chats about price and title, and the bot confirms the listing with a link.">
           <source src="assets/openclaw.mp4" type="video/mp4">
         </video>
-        <p class="prompt-caption">
+        <p class="prompt-caption" data-i18n-html="items.bot_caption">
           Full walkthrough: <a href="https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot" target="_blank" rel="noopener">Build a WhatsApp bot</a> in the MCP docs.
         </p>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="search-section" class="discovery-hidden">
+  <div class="wrap">
+    <h2 data-i18n="search.h2">Find a sale.</h2>
+    <div class="search-mode-row">
+      <label class="search-mode-label">
+        <input type="radio" name="sm" value="user" checked>
+        <span data-i18n="search.mode_user">Find a seller</span>
+      </label>
+      <label class="search-mode-label">
+        <input type="radio" name="sm" value="region">
+        <span data-i18n="search.mode_region">Browse by region</span>
+      </label>
+    </div>
+    <div id="sm-user" class="search-fields">
+      <label for="sq-username" data-i18n="search.username">Username</label>
+      <input type="text" id="sq-username" autocomplete="off">
+    </div>
+    <div id="sm-region" class="search-fields" style="display:none">
+      <label for="sq-country" data-i18n="search.country">Country</label>
+      <select id="sq-country"></select>
+      <label for="sq-city" data-i18n="search.city">City (optional)</label>
+      <input type="text" id="sq-city" autocomplete="off">
+    </div>
+    <button class="search-submit" id="search-btn" data-i18n="search.button">Search</button>
+    <p id="search-status" class="search-status"></p>
+    <div id="search-results" class="search-results"></div>
   </div>
 </section>
 
@@ -539,6 +592,20 @@ const TRANSLATIONS = {
     "cta.btn": "Sign up →",
     "blog.h2": "Latest from the blog.",
     "blog.all_posts": "All posts →",
+    "hero.shot_aria": "Open the live example",
+    "items.form_caption": "Self-hosted? Edit <code>site.json</code> + <code>items.json</code> in any text editor. Same data shape, so a sale moves between modes without rewrites.",
+    "items.claude_caption": "Install as a <a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">Claude Code plugin</a>, or wire the <a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> stdio server into any MCP client.",
+    "items.bot_caption": "Full walkthrough: <a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">Build a WhatsApp bot</a> in the MCP docs.",
+    "search.h2": "Find a sale.",
+    "search.mode_user": "Find a seller",
+    "search.mode_region": "Browse by region",
+    "search.username": "Username",
+    "search.country": "Country",
+    "search.city": "City (optional)",
+    "search.button": "Search",
+    "search.loading": "Searching...",
+    "search.no_results": "No public sales found.",
+    "search.error": "Something went wrong. Try again.",
   },
   de: {
     "nav.sign_in": "Anmelden",
@@ -566,6 +633,20 @@ const TRANSLATIONS = {
     "cta.btn": "Registrieren →",
     "blog.h2": "Neueste aus dem Blog.",
     "blog.all_posts": "Alle Beiträge →",
+    "hero.shot_aria": "Live-Beispiel öffnen",
+    "items.form_caption": "Selbst gehostet? Bearbeite <code>site.json</code> + <code>items.json</code> in einem beliebigen Texteditor. Gleiche Datenstruktur, Verkäufe lassen sich also ohne Neuerstellung zwischen Modi wechseln.",
+    "items.claude_caption": "Als <a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">Claude Code Plugin</a> installieren oder den <a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> stdio-Server in jeden MCP-Client einbinden.",
+    "items.bot_caption": "Vollständige Anleitung: <a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">WhatsApp-Bot erstellen</a> in den MCP-Docs.",
+    "search.h2": "Einen Verkauf finden.",
+    "search.mode_user": "Verkäufer finden",
+    "search.mode_region": "Nach Region durchsuchen",
+    "search.username": "Benutzername",
+    "search.country": "Land",
+    "search.city": "Stadt (optional)",
+    "search.button": "Suchen",
+    "search.loading": "Suche läuft...",
+    "search.no_results": "Keine öffentlichen Verkäufe gefunden.",
+    "search.error": "Etwas ist schiefgelaufen. Erneut versuchen.",
   },
   es: {
     "nav.sign_in": "Iniciar sesión",
@@ -593,6 +674,20 @@ const TRANSLATIONS = {
     "cta.btn": "Registrarse →",
     "blog.h2": "Lo último del blog.",
     "blog.all_posts": "Todos los artículos →",
+    "hero.shot_aria": "Abrir el ejemplo en vivo",
+    "items.form_caption": "¿Auto-alojado? Edita <code>site.json</code> + <code>items.json</code> en cualquier editor de texto. Misma estructura de datos, así que una venta se mueve entre modos sin reescribir.",
+    "items.claude_caption": "Instala como <a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">plugin de Claude Code</a>, o conecta el servidor stdio <a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> a cualquier cliente MCP.",
+    "items.bot_caption": "Tutorial completo: <a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">Construye un bot de WhatsApp</a> en los docs del MCP.",
+    "search.h2": "Encontrar una venta.",
+    "search.mode_user": "Buscar vendedor",
+    "search.mode_region": "Buscar por región",
+    "search.username": "Nombre de usuario",
+    "search.country": "País",
+    "search.city": "Ciudad (opcional)",
+    "search.button": "Buscar",
+    "search.loading": "Buscando...",
+    "search.no_results": "No se encontraron ventas públicas.",
+    "search.error": "Algo salió mal. Intenta de nuevo.",
   },
   fr: {
     "nav.sign_in": "Connexion",
@@ -620,6 +715,20 @@ const TRANSLATIONS = {
     "cta.btn": "S'inscrire →",
     "blog.h2": "Derniers du blog.",
     "blog.all_posts": "Tous les articles →",
+    "hero.shot_aria": "Ouvrir l'exemple en direct",
+    "items.form_caption": "Auto-hébergé ? Éditez <code>site.json</code> + <code>items.json</code> dans n'importe quel éditeur de texte. Même structure de données, donc une vente peut passer d'un mode à l'autre sans réécriture.",
+    "items.claude_caption": "Installez comme <a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">plugin Claude Code</a>, ou branchez le serveur stdio <a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> dans n'importe quel client MCP.",
+    "items.bot_caption": "Guide complet : <a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">Créer un bot WhatsApp</a> dans les docs MCP.",
+    "search.h2": "Trouver une vente.",
+    "search.mode_user": "Trouver un vendeur",
+    "search.mode_region": "Parcourir par région",
+    "search.username": "Nom d'utilisateur",
+    "search.country": "Pays",
+    "search.city": "Ville (facultatif)",
+    "search.button": "Rechercher",
+    "search.loading": "Recherche en cours...",
+    "search.no_results": "Aucune vente publique trouvée.",
+    "search.error": "Une erreur s'est produite. Réessayez.",
   },
   ja: {
     "nav.sign_in": "ログイン",
@@ -647,6 +756,20 @@ const TRANSLATIONS = {
     "cta.btn": "サインアップ →",
     "blog.h2": "ブログからの最新。",
     "blog.all_posts": "すべての投稿 →",
+    "hero.shot_aria": "ライブ例を開く",
+    "items.form_caption": "セルフホスト？任意のテキストエディターで<code>site.json</code>と<code>items.json</code>を編集してください。同じデータ形式なので、書き直しなしでモード間を移行できます。",
+    "items.claude_caption": "<a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">Claude Codeプラグイン</a>としてインストールするか、<a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> stdioサーバーを任意のMCPクライアントに接続してください。",
+    "items.bot_caption": "完全なガイド：MCP docsの<a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">WhatsAppボットを作成する</a>。",
+    "search.h2": "販売を探す。",
+    "search.mode_user": "売り手を探す",
+    "search.mode_region": "地域で閲覧",
+    "search.username": "ユーザー名",
+    "search.country": "国",
+    "search.city": "市区町村（任意）",
+    "search.button": "検索",
+    "search.loading": "検索中...",
+    "search.no_results": "公開販売が見つかりませんでした。",
+    "search.error": "エラーが発生しました。再試行してください。",
   },
   pt: {
     "nav.sign_in": "Entrar",
@@ -674,6 +797,20 @@ const TRANSLATIONS = {
     "cta.btn": "Inscrever-se →",
     "blog.h2": "Últimas do blog.",
     "blog.all_posts": "Todos os posts →",
+    "hero.shot_aria": "Abrir o exemplo ao vivo",
+    "items.form_caption": "Auto-hospedado? Edite <code>site.json</code> + <code>items.json</code> em qualquer editor de texto. Mesma estrutura de dados, portanto uma venda pode ser movida entre modos sem reescritas.",
+    "items.claude_caption": "Instale como <a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">plugin Claude Code</a>, ou conecte o servidor stdio <a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> a qualquer cliente MCP.",
+    "items.bot_caption": "Guia completo: <a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">Criar um bot do WhatsApp</a> na documentação do MCP.",
+    "search.h2": "Encontrar uma venda.",
+    "search.mode_user": "Encontrar vendedor",
+    "search.mode_region": "Navegar por região",
+    "search.username": "Nome de usuário",
+    "search.country": "País",
+    "search.city": "Cidade (opcional)",
+    "search.button": "Pesquisar",
+    "search.loading": "Pesquisando...",
+    "search.no_results": "Nenhuma venda pública encontrada.",
+    "search.error": "Algo deu errado. Tente novamente.",
   },
   zh: {
     "nav.sign_in": "登录",
@@ -701,6 +838,20 @@ const TRANSLATIONS = {
     "cta.btn": "注册 →",
     "blog.h2": "博客最新动态。",
     "blog.all_posts": "所有文章 →",
+    "hero.shot_aria": "打开实时示例",
+    "items.form_caption": "自托管？用任意文本编辑器编辑<code>site.json</code> + <code>items.json</code>。数据结构相同，所以销售可以在模式之间切换而无需重写。",
+    "items.claude_caption": "安装为<a href=\"https://github.com/KuvopLLC/yrdsl/tree/main/plugins/yrdsl\" target=\"_blank\" rel=\"noopener\">Claude Code插件</a>，或将<a href=\"https://www.npmjs.com/package/@yrdsl/mcp\" target=\"_blank\" rel=\"noopener\"><code>@yrdsl/mcp</code></a> stdio服务器接入任意MCP客户端。",
+    "items.bot_caption": "完整教程：MCP文档中的<a href=\"https://github.com/KuvopLLC/yrdsl/blob/main/packages/mcp/README.md#build-a-whatsapp-bot\" target=\"_blank\" rel=\"noopener\">构建WhatsApp机器人</a>。",
+    "search.h2": "查找销售。",
+    "search.mode_user": "查找卖家",
+    "search.mode_region": "按地区浏览",
+    "search.username": "用户名",
+    "search.country": "国家",
+    "search.city": "城市（可选）",
+    "search.button": "搜索",
+    "search.loading": "搜索中...",
+    "search.no_results": "未找到公开销售。",
+    "search.error": "出现了问题，请重试。",
   },
 };
 
@@ -709,6 +860,14 @@ function applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (msgs[key] != null) el.textContent = msgs[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.dataset.i18nHtml;
+    if (msgs[key] != null) el.innerHTML = msgs[key];
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const key = el.dataset.i18nAria;
+    if (msgs[key] != null) el.setAttribute('aria-label', msgs[key]);
   });
   const blogH2 = document.querySelector('.latest-posts-section h2');
   if (blogH2) blogH2.textContent = msgs['blog.h2'];
@@ -727,6 +886,108 @@ const langPick = document.getElementById('lang-pick');
 langPick.value = initialLang;
 if (initialLang !== 'en') applyLang(initialLang);
 langPick.addEventListener('change', e => applyLang(e.target.value));
+
+// ── Discovery search ─────────────────────────────────────────────────────────
+// Set ENABLE_DISCOVERY to true to reveal the search section and activate the
+// API calls. Leave false until there are enough public sales to search.
+if (new URLSearchParams(location.search).get('s') === '1') localStorage.setItem('yrdsl-discovery', '1');
+const ENABLE_DISCOVERY = localStorage.getItem('yrdsl-discovery') === '1';
+
+const ffBadge = document.getElementById('ff-badge');
+if (ENABLE_DISCOVERY) {
+  document.getElementById('search-section').classList.remove('discovery-hidden');
+  ffBadge.style.display = '';
+  ffBadge.addEventListener('click', () => {
+    localStorage.removeItem('yrdsl-discovery');
+    document.getElementById('search-section').classList.add('discovery-hidden');
+    ffBadge.style.display = 'none';
+  });
+
+  const COUNTRIES = [
+    ['AF','Afghanistan'],['AL','Albania'],['DZ','Algeria'],['AR','Argentina'],
+    ['AM','Armenia'],['AU','Australia'],['AT','Austria'],['AZ','Azerbaijan'],
+    ['BD','Bangladesh'],['BY','Belarus'],['BE','Belgium'],['BO','Bolivia'],
+    ['BA','Bosnia and Herzegovina'],['BR','Brazil'],['BG','Bulgaria'],
+    ['CA','Canada'],['CL','Chile'],['CN','China'],['CO','Colombia'],
+    ['HR','Croatia'],['CZ','Czechia'],['DK','Denmark'],['EC','Ecuador'],
+    ['EG','Egypt'],['EE','Estonia'],['ET','Ethiopia'],['FI','Finland'],
+    ['FR','France'],['GE','Georgia'],['DE','Germany'],['GH','Ghana'],
+    ['GR','Greece'],['HK','Hong Kong'],['HU','Hungary'],['IN','India'],
+    ['ID','Indonesia'],['IQ','Iraq'],['IE','Ireland'],['IL','Israel'],
+    ['IT','Italy'],['JP','Japan'],['JO','Jordan'],['KZ','Kazakhstan'],
+    ['KE','Kenya'],['KR','South Korea'],['KW','Kuwait'],['LV','Latvia'],
+    ['LB','Lebanon'],['LT','Lithuania'],['LU','Luxembourg'],['MY','Malaysia'],
+    ['MX','Mexico'],['MA','Morocco'],['NL','Netherlands'],['NZ','New Zealand'],
+    ['NG','Nigeria'],['NO','Norway'],['PK','Pakistan'],['PE','Peru'],
+    ['PH','Philippines'],['PL','Poland'],['PT','Portugal'],['QA','Qatar'],
+    ['RO','Romania'],['RU','Russia'],['SA','Saudi Arabia'],['RS','Serbia'],
+    ['SG','Singapore'],['SK','Slovakia'],['ZA','South Africa'],['ES','Spain'],
+    ['LK','Sri Lanka'],['SE','Sweden'],['CH','Switzerland'],['TW','Taiwan'],
+    ['TH','Thailand'],['TN','Tunisia'],['TR','Turkey'],['UA','Ukraine'],
+    ['AE','United Arab Emirates'],['GB','United Kingdom'],['US','United States'],
+    ['UZ','Uzbekistan'],['VN','Vietnam'],['ZW','Zimbabwe'],
+  ];
+
+  const sqCountry = document.getElementById('sq-country');
+  COUNTRIES.forEach(([code, name]) => {
+    const opt = document.createElement('option');
+    opt.value = code;
+    opt.textContent = name;
+    sqCountry.appendChild(opt);
+  });
+
+  document.querySelectorAll('input[name="sm"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+      const isUser = e.target.value === 'user';
+      document.getElementById('sm-user').style.display = isUser ? '' : 'none';
+      document.getElementById('sm-region').style.display = isUser ? 'none' : '';
+    });
+  });
+
+  document.getElementById('search-btn').addEventListener('click', async () => {
+    const status = document.getElementById('search-status');
+    const results = document.getElementById('search-results');
+    const msgs = TRANSLATIONS[initialLang] || TRANSLATIONS.en;
+    const mode = document.querySelector('input[name="sm"]:checked')?.value ?? 'user';
+
+    status.textContent = msgs['search.loading'];
+    results.innerHTML = '';
+
+    const params = new URLSearchParams();
+    if (mode === 'user') {
+      const q = document.getElementById('sq-username').value.trim();
+      if (!q) { status.textContent = ''; return; }
+      params.set('q', q);
+    } else {
+      const country = sqCountry.value;
+      const city = document.getElementById('sq-city').value.trim();
+      if (country) params.set('country', country);
+      if (city) params.set('city', city);
+    }
+
+    try {
+      const res = await fetch(`https://api.yrdsl.app/public/search?${params}`);
+      if (!res.ok) throw new Error(`http_${res.status}`);
+      const data = await res.json();
+      const items = data.results ?? [];
+      status.textContent = items.length === 0 ? msgs['search.no_results'] : '';
+      items.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'search-result-card';
+        const detail = [r.city, r.country].filter(Boolean).join(', ');
+        card.innerHTML = `
+          <div class="src-meta">
+            <span class="src-name">${r.siteName}</span>
+            <span class="src-detail">@${r.username}${detail ? ' · ' + detail : ''}${r.itemCount != null ? ' · ' + r.itemCount + ' items' : ''}</span>
+          </div>
+          <a class="src-link" href="${r.publicUrl}" target="_blank" rel="noopener">View →</a>`;
+        results.appendChild(card);
+      });
+    } catch {
+      status.textContent = msgs['search.error'];
+    }
+  });
+}
 </script>
 </body>
 </html>

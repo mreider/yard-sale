@@ -40,7 +40,8 @@ export const tools: Record<string, ToolDef> = {
     description:
       '[hosted only] Create a new sale for the signed-in user. Required: `title`. ' +
       'Optional: description, theme (conservative/retro/hip/artsy), language, currency (ISO 4217), ' +
-      'and contact (email/sms/whatsapp/notes). ' +
+      'contact (email/sms/whatsapp/notes), visibility (public/private), and region (country + city). ' +
+      'A private sale gets a secret token URL (/s/{token}) — the username never appears in the link. ' +
       'Returns the created sale summary including `editorUrl` — point the user there to finish ' +
       'setup and publish. Self-hosted users clone the template repo instead.',
     schema: z.object({
@@ -57,6 +58,19 @@ export const tools: Record<string, ToolDef> = {
           notes: z.string().optional(),
         })
         .optional(),
+      visibility: z
+        .enum(['public', 'private'])
+        .optional()
+        .describe(
+          "Optional: 'public' (default, discoverable at /{username}/{slug}) or 'private' (secret token URL, username hidden).",
+        ),
+      region: z
+        .object({
+          country: z.string().length(2).describe('ISO 3166-1 alpha-2 country code.'),
+          city: z.string().optional(),
+        })
+        .optional()
+        .describe('Optional region for discovery search.'),
     }),
     handler: async (backend, args) =>
       backend.createSale({
@@ -66,6 +80,8 @@ export const tools: Record<string, ToolDef> = {
         language: args.language as string | undefined,
         currency: args.currency as string | undefined,
         contact: args.contact as CreateSaleInput['contact'],
+        visibility: args.visibility as CreateSaleInput['visibility'],
+        region: args.region as CreateSaleInput['region'],
       }),
   },
 
@@ -79,7 +95,8 @@ export const tools: Record<string, ToolDef> = {
   update_site: {
     description:
       'Patch fields on the sale metadata. Pass only what you want to change. ' +
-      "`contact` is merged shallowly: passing `{ email: 'x' }` keeps existing sms/whatsapp.",
+      "`contact` is merged shallowly: passing `{ email: 'x' }` keeps existing sms/whatsapp. " +
+      "Set `visibility` to 'private' to get a secret token URL (username hidden) or 'public' to revert.",
     schema: z.object({
       ...SaleRefField,
       siteName: z.string().optional(),
@@ -97,6 +114,19 @@ export const tools: Record<string, ToolDef> = {
           notes: z.string().optional(),
         })
         .optional(),
+      visibility: z
+        .enum(['public', 'private'])
+        .optional()
+        .describe(
+          "Optional: 'public' (default) or 'private' (secret token URL, username hidden). Changing from public to private regenerates the token.",
+        ),
+      region: z
+        .object({
+          country: z.string().length(2).describe('ISO 3166-1 alpha-2 country code.'),
+          city: z.string().optional(),
+        })
+        .optional()
+        .describe('Optional region for discovery search.'),
     }),
     handler: async (backend, args) => {
       const { sale, ...patch } = args;

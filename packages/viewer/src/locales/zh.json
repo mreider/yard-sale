@@ -12,6 +12,7 @@
   "sort.price_desc": "价格：高到低",
   "empty.no_results": "无结果。尝试清除筛选或关闭隐藏已预订。",
   "footer.updated": "已更新",
+  "footer.just_now": "刚才",
   "item.reserved": "已预订",
   "item.photos_one": "1 张照片",
   "item.photos_other": "{count} 张照片",

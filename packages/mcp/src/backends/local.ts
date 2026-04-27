@@ -94,6 +94,11 @@ export class LocalFileBackend implements Backend {
     const { contact, ...rest } = patch;
     const next: SaleSite = { ...site, ...rest } as SaleSite;
     if (contact) next.contact = { ...(site.contact ?? {}), ...contact };
+    if (patch.visibility === 'private') {
+      process.stderr.write(
+        'yrdsl-mcp: visibility=private stored in site.json but has no effect on local/GitHub Pages routing\n',
+      );
+    }
     this.writeJson(this.sitePath, next);
     return next;
   }

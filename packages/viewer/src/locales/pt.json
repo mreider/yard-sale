@@ -12,6 +12,7 @@
   "sort.price_desc": "Preço: maior para menor",
   "empty.no_results": "Nenhum resultado. Tente limpar os filtros ou desativar \"Ocultar reservados\".",
   "footer.updated": "Atualizado",
+  "footer.just_now": "agora mesmo",
   "item.reserved": "Reservado",
   "item.photos_one": "1 foto",
   "item.photos_other": "{count} fotos",

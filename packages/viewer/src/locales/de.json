@@ -12,6 +12,7 @@
   "sort.price_desc": "Preis: hoch bis niedrig",
   "empty.no_results": "Keine Übereinstimmungen. Versuche, Filter zu löschen oder \"Reservierte verbergen\" zu deaktivieren.",
   "footer.updated": "Aktualisiert",
+  "footer.just_now": "gerade eben",
   "item.reserved": "Reserviert",
   "item.photos_one": "1 Foto",
   "item.photos_other": "{count} Fotos",

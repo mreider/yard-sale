@@ -12,6 +12,7 @@
   "sort.price_desc": "価格：高い順",
   "empty.no_results": "結果がありません。フィルターをクリアするか、予約済みを隠すをオフにしてください。",
   "footer.updated": "更新済み",
+  "footer.just_now": "たった今",
   "item.reserved": "予約済み",
   "item.photos_one": "1 枚の写真",
   "item.photos_other": "{count} 枚の写真",

@@ -12,6 +12,7 @@
   "sort.price_desc": "Prix: haut à bas",
   "empty.no_results": "Aucun résultat. Essaie d'effacer les filtres ou de désactiver \"Masquer les réservés\".",
   "footer.updated": "Mis à jour",
+  "footer.just_now": "à l'instant",
   "item.reserved": "Réservé",
   "item.photos_one": "1 photo",
   "item.photos_other": "{count} photos",

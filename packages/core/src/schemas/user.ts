@@ -3,6 +3,14 @@ import { z } from 'zod';
 export const UpdateMeBody = z.object({
   defaultLanguage: z.string().min(2).max(8).optional(),
   defaultTheme: z.enum(['conservative', 'artsy', 'hip', 'retro']).optional(),
+  displayName: z.string().max(100).optional(),
+  profilePublic: z.boolean().optional(),
+  defaultRegion: z
+    .object({
+      country: z.string().length(2),
+      city: z.string().optional(),
+    })
+    .optional(),
 });
 export type UpdateMeBody = z.infer<typeof UpdateMeBody>;
 
@@ -30,4 +38,7 @@ export interface UserPublic {
   defaultLanguage: string;
   defaultTheme: string;
   createdAt: number;
+  displayName?: string;
+  profilePublic: boolean;
+  defaultRegion?: { country: string; city?: string };
 }

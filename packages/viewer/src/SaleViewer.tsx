@@ -196,8 +196,9 @@ export function SaleViewer({ site, items, locale, initialItemSlug }: SaleViewerP
           </div>
           <div className="header-right">
             <div className="stats">
-              <b>{available}</b> available · <b>{reservedCount}</b> reserved · <b>{items.length}</b>{' '}
-              total
+              <b>{available}</b> {t('stats.available', activeLocale)} · <b>{reservedCount}</b>{' '}
+              {t('stats.reserved', activeLocale)} · <b>{items.length}</b>{' '}
+              {t('stats.total', activeLocale)}
             </div>
             <LanguagePicker locale={activeLocale} onChange={switchLocale} />
           </div>
@@ -248,7 +249,8 @@ export function SaleViewer({ site, items, locale, initialItemSlug }: SaleViewerP
           {location ? ` · ${location}` : ''}
         </span>
         <span>
-          {t('footer.updated', activeLocale)} {items[0]?.added ?? 'just now'}
+          {t('footer.updated', activeLocale)}{' '}
+          {items[0]?.added ?? t('footer.just_now', activeLocale)}
         </span>
       </footer>
 

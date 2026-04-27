@@ -95,6 +95,49 @@ describe('SaleSite', () => {
   });
 });
 
+describe('SaleSite visibility and region', () => {
+  it('defaults visibility to public', () => {
+    const parsed = SaleSite.parse({ siteName: 'Spring Purge' });
+    expect(parsed.visibility).toBe('public');
+  });
+
+  it('accepts private visibility', () => {
+    const parsed = SaleSite.parse({ siteName: 'x', visibility: 'private' });
+    expect(parsed.visibility).toBe('private');
+  });
+
+  it('rejects unknown visibility values', () => {
+    expect(() => SaleSite.parse({ siteName: 'x', visibility: 'unlisted' })).toThrow();
+  });
+
+  it('accepts a valid region', () => {
+    const parsed = SaleSite.parse({
+      siteName: 'x',
+      region: { country: 'US', city: 'Austin' },
+    });
+    expect(parsed.region?.country).toBe('US');
+    expect(parsed.region?.city).toBe('Austin');
+  });
+
+  it('rejects a region with a non-2-letter country code', () => {
+    expect(() => SaleSite.parse({ siteName: 'x', region: { country: 'USA' } })).toThrow();
+  });
+
+  it('accepts region without city', () => {
+    const parsed = SaleSite.parse({ siteName: 'x', region: { country: 'DE' } });
+    expect(parsed.region?.country).toBe('DE');
+    expect(parsed.region?.city).toBeUndefined();
+  });
+
+  it('passes through privateToken as host-only field', () => {
+    const parsed = SaleSite.parse({ siteName: 'x', privateToken: 'abc1234567' }) as Record<
+      string,
+      unknown
+    >;
+    expect(parsed.privateToken).toBe('abc1234567');
+  });
+});
+
 describe('SaleContact', () => {
   it('accepts all channels', () => {
     const parsed = SaleContact.parse({
