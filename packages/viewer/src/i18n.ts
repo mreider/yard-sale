@@ -25,7 +25,7 @@ export const LOCALE_NAMES: Record<string, string> = {
 
 export function detectLocale(): string {
   if (typeof navigator === 'undefined') return 'en';
-  const lang = navigator.language.split('-')[0];
+  const lang = navigator.language.split('-')[0]!;
   return lang in catalogs ? lang : 'en';
 }
 
