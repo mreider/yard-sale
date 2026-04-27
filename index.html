@@ -109,6 +109,17 @@ code { font-family: "JetBrains Mono", monospace; font-size: 0.92em; background: 
 html[data-dark="true"] .mode .sun { display: inline-block; }
 html[data-dark="true"] .mode .moon { display: none; }
 
+.lang-pick {
+  font-size: 13px;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+.lang-pick:focus-visible { outline: 2px solid var(--ink); border-radius: 2px; }
+
 /* Hero */
 .hero { padding: 64px 0 40px; }
 @media (max-width: 720px) { .hero { padding: 40px 0 32px; } }
@@ -364,8 +375,17 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
     </a>
     <div class="nav-right">
       <a href="/blog/">Blog</a>
-      <a class="nav-signin" href="https://app.yrdsl.app/login">Sign in</a>
-      <a class="nav-cta" href="https://app.yrdsl.app/signup">Sign up</a>
+      <a class="nav-signin" href="https://app.yrdsl.app/login" data-i18n="nav.sign_in">Sign in</a>
+      <a class="nav-cta" href="https://app.yrdsl.app/signup" data-i18n="nav.sign_up">Sign up</a>
+      <select id="lang-pick" aria-label="Language" class="lang-pick">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="ja">日本語</option>
+        <option value="pt">Português</option>
+        <option value="zh">中文</option>
+      </select>
       <button class="mode" id="mode" aria-label="Toggle dark mode">
         <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
         <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
@@ -376,12 +396,12 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 
 <section class="hero" style="border-top: none;">
   <div class="wrap">
-    <h1>A digital yard sale, built for Claude.</h1>
-    <p class="hero-sub">
+    <h1 data-i18n="hero.h1">A digital yard sale, built for Claude.</h1>
+    <p class="hero-sub" data-i18n="hero.sub">
       Drop in your photos, it writes the listings. Share the link. Buyers reserve what they want. Host it free on your own GitHub, or let us host it for pennies. Hand-editing works too. All open source.
     </p>
     <p class="hero-link">
-      See a <a href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener">live example</a>.
+      <span data-i18n="hero.see_a">See a</span> <a href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener" data-i18n="hero.live_example">live example</a>.
     </p>
     <a class="shot" href="https://mreider.github.io/yrdsl-example/" target="_blank" rel="noopener" aria-label="Open the live example">
       <img src="assets/hero-gallery.png" alt="Screenshot of a yrdsl.app sale page showing 6 items in a grid" loading="lazy" />
@@ -391,23 +411,23 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 
 <section>
   <div class="wrap">
-    <h2>Two ways to host it.</h2>
+    <h2 data-i18n="host.h2">Two ways to host it.</h2>
     <div class="paths">
       <div class="path">
-        <h3>Host it yourself.</h3>
-        <p>
+        <h3 data-i18n="host.self_h3">Host it yourself.</h3>
+        <p data-i18n="host.self_p">
           GitHub Pages, Vercel, Netlify, or Cloudflare Pages. All free, all tied to the same JSON files so you can move between them.
         </p>
-        <a class="cta" href="/deploy/">
+        <a class="cta" href="/deploy/" data-i18n="host.self_cta">
           How to deploy →
         </a>
       </div>
       <div class="path">
-        <h3>Let us host it.</h3>
-        <p>
-          Sign up, add items in a web form (no JSON, no git), share a short URL like <code>yrdsl.app/you/sale</code>. About $0.10 a sale per month; we handle the hosting and updates. No commission.
+        <h3 data-i18n="host.us_h3">Let us host it.</h3>
+        <p data-i18n="host.us_p">
+          Sign up, add items in a web form (no JSON, no git), share a short URL like yrdsl.app/you/sale. About $0.10 a sale per month; we handle the hosting and updates. No commission.
         </p>
-        <a class="cta" href="https://app.yrdsl.app/signup">
+        <a class="cta" href="https://app.yrdsl.app/signup" data-i18n="host.us_cta">
           Sign up →
         </a>
       </div>
@@ -417,11 +437,11 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 
 <section>
   <div class="wrap">
-    <h2>Add and edit items.</h2>
+    <h2 data-i18n="items.h2">Add and edit items.</h2>
     <div class="paths">
       <div class="path path-centered">
-        <h3>Fill in a form.</h3>
-        <p>
+        <h3 data-i18n="items.form_h3">Fill in a form.</h3>
+        <p data-i18n="items.form_p">
           On hosted, add items in a web editor: pick a photo, type a title and price, hit save. No JSON, no git, no command line.
         </p>
         <video class="path-shot" controls preload="metadata" playsinline poster="assets/form-poster.webp" aria-label="Screencast: using the yrdsl.app form editor to add an item, type a title and price, attach a photo, and hit save.">
@@ -432,8 +452,8 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         </p>
       </div>
       <div class="path path-centered">
-        <h3>Or chat with Claude.</h3>
-        <p>
+        <h3 data-i18n="items.claude_h3">Or chat with Claude.</h3>
+        <p data-i18n="items.claude_p">
           Through the MCP, Claude can add items, write descriptions, set prices, and attach photos from a chat. Works on hosted (via API) and self-hosted (via your local repo).
         </p>
         <video class="path-shot" controls preload="metadata" playsinline poster="assets/claude-poster.webp" aria-label="Screencast: asking Claude in a chat to add a Moccamaster listing from a photo. Claude calls the yrdsl MCP and posts back the live URL.">
@@ -444,8 +464,8 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
         </p>
       </div>
       <div class="path path-centered">
-        <h3>Or build a bot.</h3>
-        <p>
+        <h3 data-i18n="items.bot_h3">Or build a bot.</h3>
+        <p data-i18n="items.bot_p">
           The hosted API is a REST endpoint with a bearer token. Wire it to any chat platform and an LLM to manage a sale by message.
         </p>
         <video class="path-shot" controls preload="metadata" playsinline poster="assets/openclaw-poster.webp" aria-label="Screencast: a user sends a photo of a table to a WhatsApp bot, chats about price and title, and the bot confirms the listing with a link.">
@@ -463,9 +483,9 @@ footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
 
 <section class="cta-end">
   <div class="wrap">
-    <h2>Start a sale.</h2>
-    <p>Free during the pre-release.</p>
-    <a class="cta-btn" href="https://app.yrdsl.app/signup">Sign up &rarr;</a>
+    <h2 data-i18n="cta.h2">Start a sale.</h2>
+    <p data-i18n="cta.p">Free during the pre-release.</p>
+    <a class="cta-btn" href="https://app.yrdsl.app/signup" data-i18n="cta.btn">Sign up &rarr;</a>
   </div>
 </section>
 
@@ -491,6 +511,222 @@ modeBtn.addEventListener("click", () => {
   document.documentElement.setAttribute("data-dark", String(on));
   localStorage.setItem("yrdsl-dark", String(on));
 });
+
+const TRANSLATIONS = {
+  en: {
+    "nav.sign_in": "Sign in",
+    "nav.sign_up": "Sign up",
+    "hero.h1": "A digital yard sale, built for Claude.",
+    "hero.sub": "Drop in your photos, it writes the listings. Share the link. Buyers reserve what they want. Host it free on your own GitHub, or let us host it for pennies. Hand-editing works too. All open source.",
+    "hero.see_a": "See a",
+    "hero.live_example": "live example",
+    "host.h2": "Two ways to host it.",
+    "host.self_h3": "Host it yourself.",
+    "host.self_p": "GitHub Pages, Vercel, Netlify, or Cloudflare Pages. All free, all tied to the same JSON files so you can move between them.",
+    "host.self_cta": "How to deploy →",
+    "host.us_h3": "Let us host it.",
+    "host.us_p": "Sign up, add items in a web form (no JSON, no git), share a short URL like yrdsl.app/you/sale. About $0.10 a sale per month; we handle the hosting and updates. No commission.",
+    "host.us_cta": "Sign up →",
+    "items.h2": "Add and edit items.",
+    "items.form_h3": "Fill in a form.",
+    "items.form_p": "On hosted, add items in a web editor: pick a photo, type a title and price, hit save. No JSON, no git, no command line.",
+    "items.claude_h3": "Or chat with Claude.",
+    "items.claude_p": "Through the MCP, Claude can add items, write descriptions, set prices, and attach photos from a chat. Works on hosted (via API) and self-hosted (via your local repo).",
+    "items.bot_h3": "Or build a bot.",
+    "items.bot_p": "The hosted API is a REST endpoint with a bearer token. Wire it to any chat platform and an LLM to manage a sale by message.",
+    "cta.h2": "Start a sale.",
+    "cta.p": "Free during the pre-release.",
+    "cta.btn": "Sign up →",
+    "blog.h2": "Latest from the blog.",
+    "blog.all_posts": "All posts →",
+  },
+  de: {
+    "nav.sign_in": "Anmelden",
+    "nav.sign_up": "Registrieren",
+    "hero.h1": "Ein digitaler Flohmarkt, gebaut für Claude.",
+    "hero.sub": "Gib deine Fotos ein, es schreibt die Angebote. Teile den Link. Käufer reservieren, was sie wollen. Hoste es kostenlos auf deinem GitHub oder lass uns es für Cents pro Monat hosten. Manuelle Bearbeitung funktioniert auch. Alles Open Source.",
+    "hero.see_a": "Siehe ein",
+    "hero.live_example": "Live-Beispiel",
+    "host.h2": "Zwei Möglichkeiten zum Hosten.",
+    "host.self_h3": "Selbst hosten.",
+    "host.self_p": "GitHub Pages, Vercel, Netlify oder Cloudflare Pages. Alle kostenlos, alle an dieselben JSON-Dateien gebunden, sodass du zwischen ihnen wechseln kannst.",
+    "host.self_cta": "Wie man deployed →",
+    "host.us_h3": "Lass uns es hosten.",
+    "host.us_p": "Melde dich an, füge Artikel in einem Webformular hinzu (kein JSON, kein Git), teile eine kurze URL wie yrdsl.app/du/verkauf. Etwa 0,10 USD pro Verkauf pro Monat; wir kümmern uns um Hosting und Updates. Keine Provision.",
+    "host.us_cta": "Registrieren →",
+    "items.h2": "Artikel hinzufügen und bearbeiten.",
+    "items.form_h3": "Fülle ein Formular aus.",
+    "items.form_p": "Im gehosteten Modus: Füge Artikel in einem Web-Editor hinzu: Wähle ein Foto, gib einen Titel und Preis ein, speichere. Kein JSON, kein Git, keine Befehlszeile.",
+    "items.claude_h3": "Oder chatte mit Claude.",
+    "items.claude_p": "Über das MCP kann Claude Artikel hinzufügen, Beschreibungen schreiben, Preise festlegen und Fotos aus einem Chat anhängen. Funktioniert auf gehostet (über API) und selbst gehostet (über dein lokales Repo).",
+    "items.bot_h3": "Oder erstelle einen Bot.",
+    "items.bot_p": "Die gehostete API ist ein REST-Endpunkt mit einem Bearer-Token. Verbinde ihn mit jeder Chat-Plattform und einem LLM, um einen Verkauf per Nachricht zu verwalten.",
+    "cta.h2": "Starten Sie einen Verkauf.",
+    "cta.p": "Kostenlos während der Vorschau.",
+    "cta.btn": "Registrieren →",
+    "blog.h2": "Neueste aus dem Blog.",
+    "blog.all_posts": "Alle Beiträge →",
+  },
+  es: {
+    "nav.sign_in": "Iniciar sesión",
+    "nav.sign_up": "Registrarse",
+    "hero.h1": "Una venta de garaje digital, construida para Claude.",
+    "hero.sub": "Suelta tus fotos, escribe los anuncios. Comparte el enlace. Los compradores reservan lo que quieren. Alójalo gratis en tu GitHub o déjanos alojarlo por centavos al mes. La edición manual también funciona. Todo es código abierto.",
+    "hero.see_a": "Ver un",
+    "hero.live_example": "ejemplo en vivo",
+    "host.h2": "Dos formas de alojarlo.",
+    "host.self_h3": "Alójalo tú mismo.",
+    "host.self_p": "GitHub Pages, Vercel, Netlify o Cloudflare Pages. Todos gratis, todos vinculados a los mismos archivos JSON para que puedas cambiar entre ellos.",
+    "host.self_cta": "Cómo desplegar →",
+    "host.us_h3": "Déjanos alojarlo.",
+    "host.us_p": "Regístrate, añade artículos en un formulario web (sin JSON, sin git), comparte una URL corta como yrdsl.app/tu/venta. Alrededor de $0.10 por venta al mes; nos encargamos del alojamiento y las actualizaciones. Sin comisión.",
+    "host.us_cta": "Registrarse →",
+    "items.h2": "Añadir y editar artículos.",
+    "items.form_h3": "Rellena un formulario.",
+    "items.form_p": "En alojado, añade artículos en un editor web: elige una foto, escribe un título y precio, guarda. Sin JSON, sin git, sin línea de comandos.",
+    "items.claude_h3": "O chatea con Claude.",
+    "items.claude_p": "A través del MCP, Claude puede añadir artículos, escribir descripciones, establecer precios y adjuntar fotos desde un chat. Funciona en alojado (vía API) y autohospedado (vía tu repo local).",
+    "items.bot_h3": "O construye un bot.",
+    "items.bot_p": "La API alojada es un endpoint REST con un token portador. Conéctalo a cualquier plataforma de chat y un LLM para gestionar una venta por mensaje.",
+    "cta.h2": "Inicia una venta.",
+    "cta.p": "Gratis durante la prerelease.",
+    "cta.btn": "Registrarse →",
+    "blog.h2": "Lo último del blog.",
+    "blog.all_posts": "Todos los artículos →",
+  },
+  fr: {
+    "nav.sign_in": "Connexion",
+    "nav.sign_up": "S'inscrire",
+    "hero.h1": "Une vente de garage numérique, construite pour Claude.",
+    "hero.sub": "Déposez vos photos, elle écrit les annonces. Partagez le lien. Les acheteurs réservent ce qu'ils veulent. Hébergez-le gratuitement sur votre GitHub ou laissez-nous l'héberger pour quelques centimes par mois. L'édition manuelle fonctionne aussi. Tout est open source.",
+    "hero.see_a": "Voir un",
+    "hero.live_example": "exemple en direct",
+    "host.h2": "Deux façons de l'héberger.",
+    "host.self_h3": "Hébergez-le vous-même.",
+    "host.self_p": "GitHub Pages, Vercel, Netlify ou Cloudflare Pages. Tous gratuits, tous liés aux mêmes fichiers JSON pour que vous puissiez passer de l'un à l'autre.",
+    "host.self_cta": "Comment déployer →",
+    "host.us_h3": "Laissez-nous l'héberger.",
+    "host.us_p": "Inscrivez-vous, ajoutez des articles dans un formulaire web (pas de JSON, pas de git), partagez une URL courte comme yrdsl.app/vous/vente. Environ 0,10 $ par vente par mois; nous gérons l'hébergement et les mises à jour. Pas de commission.",
+    "host.us_cta": "S'inscrire →",
+    "items.h2": "Ajouter et modifier des articles.",
+    "items.form_h3": "Remplissez un formulaire.",
+    "items.form_p": "En hébergé, ajoutez des articles dans un éditeur web : choisissez une photo, tapez un titre et un prix, enregistrez. Pas de JSON, pas de git, pas de ligne de commande.",
+    "items.claude_h3": "Ou discutez avec Claude.",
+    "items.claude_p": "Via l'MCP, Claude peut ajouter des articles, écrire des descriptions, définir des prix et joindre des photos à partir d'une conversation. Fonctionne en hébergé (via API) et auto-hébergé (via votre repo local).",
+    "items.bot_h3": "Ou créez un bot.",
+    "items.bot_p": "L'API hébergée est un endpoint REST avec un token bearer. Connectez-le à n'importe quelle plateforme de chat et un LLM pour gérer une vente par message.",
+    "cta.h2": "Lancez une vente.",
+    "cta.p": "Gratuit pendant la pré-sortie.",
+    "cta.btn": "S'inscrire →",
+    "blog.h2": "Derniers du blog.",
+    "blog.all_posts": "Tous les articles →",
+  },
+  ja: {
+    "nav.sign_in": "ログイン",
+    "nav.sign_up": "サインアップ",
+    "hero.h1": "Claude用に構築されたデジタルヤードセール。",
+    "hero.sub": "写真を入れると、リスティングが書かれます。リンクを共有します。買い手が欲しいものを予約します。GitHubで無料でホストするか、月数セント程度でホストしてもらいます。手動編集も可能です。すべてオープンソースです。",
+    "hero.see_a": "ライブを見る",
+    "hero.live_example": "例",
+    "host.h2": "ホストする2つの方法。",
+    "host.self_h3": "自分でホストする。",
+    "host.self_p": "GitHub Pages、Vercel、Netlify、またはCloudflare Pages。すべて無料で、同じJSONファイルに関連付けられているため、それらの間を移動できます。",
+    "host.self_cta": "デプロイ方法 →",
+    "host.us_h3": "ホストしてもらう。",
+    "host.us_p": "サインアップして、Webフォームにアイテムを追加（JSONなし、Gitなし）し、yrdsl.app/you/saleのような短いURLを共有します。売却あたり月額約0.10ドル。ホストとアップデートはお任せください。手数料なし。",
+    "host.us_cta": "サインアップ →",
+    "items.h2": "アイテムを追加・編集します。",
+    "items.form_h3": "フォームに記入してください。",
+    "items.form_p": "ホストされた場合、Webエディターにアイテムを追加：写真を選択し、タイトルと価格を入力し、保存します。JSON、Git、コマンドラインはありません。",
+    "items.claude_h3": "またはClaudeとチャットしてください。",
+    "items.claude_p": "MCPを通じて、Claudeはチャットからアイテムを追加し、説明を書き、価格を設定し、写真を添付できます。ホストされた場合（API経由）と自己ホストされた場合（ローカルリポジトリ経由）の両方で機能します。",
+    "items.bot_h3": "またはボットを作成します。",
+    "items.bot_p": "ホストされたAPIは、ベアラートークン付きのRESTエンドポイントです。任意のチャットプラットフォームとLLMに接続して、メッセージで売却を管理します。",
+    "cta.h2": "セールを開始します。",
+    "cta.p": "プレリリース期間は無料です。",
+    "cta.btn": "サインアップ →",
+    "blog.h2": "ブログからの最新。",
+    "blog.all_posts": "すべての投稿 →",
+  },
+  pt: {
+    "nav.sign_in": "Entrar",
+    "nav.sign_up": "Inscrever-se",
+    "hero.h1": "Uma venda de garagem digital, construída para Claude.",
+    "hero.sub": "Solte suas fotos, ela escreve os anúncios. Compartilhe o link. Os compradores reservam o que desejam. Hospede gratuitamente no seu GitHub ou deixe-nos hospedar por centavos por mês. A edição manual também funciona. Tudo é de código aberto.",
+    "hero.see_a": "Ver um",
+    "hero.live_example": "exemplo em tempo real",
+    "host.h2": "Duas formas de hospedá-lo.",
+    "host.self_h3": "Hospede você mesmo.",
+    "host.self_p": "GitHub Pages, Vercel, Netlify ou Cloudflare Pages. Todos gratuitos, todos vinculados aos mesmos arquivos JSON para que você possa alternar entre eles.",
+    "host.self_cta": "Como implantar →",
+    "host.us_h3": "Deixe-nos hospedá-lo.",
+    "host.us_p": "Inscreva-se, adicione itens em um formulário web (sem JSON, sem git), compartilhe uma URL curta como yrdsl.app/você/venda. Cerca de $0,10 por venda por mês; cuidamos da hospedagem e atualizações. Sem comissão.",
+    "host.us_cta": "Inscrever-se →",
+    "items.h2": "Adicionar e editar itens.",
+    "items.form_h3": "Preencha um formulário.",
+    "items.form_p": "Hospedado, adicione itens em um editor web: escolha uma foto, digite um título e preço, salve. Sem JSON, sem git, sem linha de comando.",
+    "items.claude_h3": "Ou converse com Claude.",
+    "items.claude_p": "Através do MCP, Claude pode adicionar itens, escrever descrições, definir preços e anexar fotos de um bate-papo. Funciona em hospedado (via API) e auto-hospedado (via seu repo local).",
+    "items.bot_h3": "Ou crie um bot.",
+    "items.bot_p": "A API hospedada é um endpoint REST com um token de portador. Conecte-a a qualquer plataforma de bate-papo e um LLM para gerenciar uma venda por mensagem.",
+    "cta.h2": "Inicie uma venda.",
+    "cta.p": "Gratuito durante o pré-lançamento.",
+    "cta.btn": "Inscrever-se →",
+    "blog.h2": "Últimas do blog.",
+    "blog.all_posts": "Todos os posts →",
+  },
+  zh: {
+    "nav.sign_in": "登录",
+    "nav.sign_up": "注册",
+    "hero.h1": "为Claude构建的数字车库销售。",
+    "hero.sub": "放入你的照片，它会写列表。分享链接。买家预留他们想要的。免费在你的GitHub上托管，或让我们每月以美分价格托管。手动编辑也可以。全部开源。",
+    "hero.see_a": "查看",
+    "hero.live_example": "实时示例",
+    "host.h2": "两种托管方式。",
+    "host.self_h3": "自己托管。",
+    "host.self_p": "GitHub Pages、Vercel、Netlify或Cloudflare Pages。全部免费，全部绑定到相同的JSON文件，因此你可以在它们之间切换。",
+    "host.self_cta": "如何部署 →",
+    "host.us_h3": "让我们托管。",
+    "host.us_p": "注册，在网页表单中添加项目（无JSON，无git），分享短URL如yrdsl.app/你/销售。每月每个销售约0.10美元；我们处理托管和更新。无佣金。",
+    "host.us_cta": "注册 →",
+    "items.h2": "添加和编辑项目。",
+    "items.form_h3": "填写表格。",
+    "items.form_p": "在托管中，在网络编辑器中添加项目：选择照片，输入标题和价格，保存。无JSON，无git，无命令行。",
+    "items.claude_h3": "或与Claude聊天。",
+    "items.claude_p": "通过MCP，Claude可以添加项目、撰写描述、设置价格并从聊天中附加照片。适用于托管（通过API）和自托管（通过你的本地仓库）。",
+    "items.bot_h3": "或构建机器人。",
+    "items.bot_p": "托管API是带有bearer令牌的REST端点。将其连接到任何聊天平台和LLM以通过消息管理销售。",
+    "cta.h2": "开始销售。",
+    "cta.p": "预发布期间免费。",
+    "cta.btn": "注册 →",
+    "blog.h2": "博客最新动态。",
+    "blog.all_posts": "所有文章 →",
+  },
+};
+
+function applyLang(lang) {
+  const msgs = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (msgs[key] != null) el.textContent = msgs[key];
+  });
+  const blogH2 = document.querySelector('.latest-posts-section h2');
+  if (blogH2) blogH2.textContent = msgs['blog.h2'];
+  const allPosts = document.querySelector('.latest-posts-more a');
+  if (allPosts) allPosts.textContent = msgs['blog.all_posts'];
+  document.documentElement.lang = lang;
+  localStorage.setItem('yrdsl-locale', lang);
+}
+
+const supported = Object.keys(TRANSLATIONS);
+const storedLang = localStorage.getItem('yrdsl-locale');
+const detected = (navigator.language || 'en').split('-')[0];
+const initialLang = supported.includes(storedLang) ? storedLang
+  : supported.includes(detected) ? detected : 'en';
+const langPick = document.getElementById('lang-pick');
+langPick.value = initialLang;
+if (initialLang !== 'en') applyLang(initialLang);
+langPick.addEventListener('change', e => applyLang(e.target.value));
 </script>
 </body>
 </html>
