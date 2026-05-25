@@ -32,6 +32,46 @@ function makeMoneyFormatter(currency: string, locale: string) {
 
 type SortKey = 'newest' | 'oldest' | 'price-asc' | 'price-desc';
 
+/**
+ * Splits a description into text + clickable links. Matches http(s) URLs and
+ * renders them as `<a target="_blank" rel="noopener noreferrer">`. React's
+ * default text rendering keeps everything else safe from XSS.
+ *
+ * Trailing punctuation that's almost always sentence-ending rather than part
+ * of a URL — period/comma/semicolon/colon/exclam/question/close-paren — gets
+ * peeled off so e.g. "see foo.com/x." links `foo.com/x` and leaves the period.
+ */
+const URL_REGEX = /(https?:\/\/[^\s<>"']+)/g;
+const URL_TRAILING_PUNCT = /[.,;:!?)]+$/;
+
+function linkify(text: string): (string | React.ReactElement)[] {
+  const out: (string | React.ReactElement)[] = [];
+  let cursor = 0;
+  let key = 0;
+  let match: RegExpExecArray | null;
+  URL_REGEX.lastIndex = 0;
+  // biome-ignore lint/suspicious/noAssignInExpressions: standard exec loop
+  while ((match = URL_REGEX.exec(text)) !== null) {
+    if (match.index > cursor) out.push(text.slice(cursor, match.index));
+    let url = match[0];
+    let trailing = '';
+    const punct = url.match(URL_TRAILING_PUNCT);
+    if (punct) {
+      trailing = punct[0];
+      url = url.slice(0, -trailing.length);
+    }
+    out.push(
+      <a key={key++} href={url} target="_blank" rel="noopener noreferrer">
+        {url}
+      </a>,
+    );
+    if (trailing) out.push(trailing);
+    cursor = match.index + match[0].length;
+  }
+  if (cursor < text.length) out.push(text.slice(cursor));
+  return out;
+}
+
 /** Look up `field` on `site`, preferring `${field}_${locale}` when a locale is set. */
 function localized<T>(site: SaleSite, field: string, locale?: string): T | undefined {
   const s = site as unknown as Record<string, unknown>;
@@ -593,7 +633,7 @@ function Modal({
         <div className="content">
           <h2>{item.title}</h2>
           {priceBlock}
-          {item.description && <div className="desc">{item.description}</div>}
+          {item.description && <div className="desc">{linkify(item.description)}</div>}
           <div className="meta">
             <span>
               <b>{t('modal.listed', locale)}</b> {item.added}
